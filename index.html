@@ -1,0 +1,1649 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Swahili phrasebook, word list, flashcards and sentence builder for everyday life at a vocational college in Tanzania.">
+<style>
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<title>Kiswahili Kila Siku</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: one column phrasebook app; colour-coded verb pieces (subject, tense, root) are the visual signature */
+:root{
+  --bg:#F1F3F2; --surface:#FFFFFF; --sunk:#E6EAE8; --fg:#1B2233; --muted:#5A6375; --line:#D3D9D7;
+  --accent:#3F44A8; --accent-ink:#FFFFFF; --acc-bg:#E4E5F7;
+  --subj:#0E7570; --subj-bg:#DDF1EF; --tense:#9A5F0C; --tense-bg:#F7EAD3; --neg:#A8323F; --neg-bg:#F8E0E3; --root:#1B2233; --root-bg:#E7E9F2;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#11141B; --surface:#1A1F2B; --sunk:#232937; --fg:#E7E9F0; --muted:#A0A7B8; --line:#2E3546;
+  --accent:#9CA1FF; --accent-ink:#11141B; --acc-bg:#262A4A;
+  --subj:#5CC9C0; --subj-bg:#163533; --tense:#E8B15A; --tense-bg:#3A2D16; --neg:#EE8A95; --neg-bg:#3D1E24; --root:#E7E9F0; --root-bg:#2A3044; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#11141B; --surface:#1A1F2B; --sunk:#232937; --fg:#E7E9F0; --muted:#A0A7B8; --line:#2E3546;
+  --accent:#9CA1FF; --accent-ink:#11141B; --acc-bg:#262A4A;
+  --subj:#5CC9C0; --subj-bg:#163533; --tense:#E8B15A; --tense-bg:#3A2D16; --neg:#EE8A95; --neg-bg:#3D1E24; --root:#E7E9F0; --root-bg:#2A3044; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;padding-inline:16px;padding-block:0 48px}
+.wrap{max-width:760px;margin:0 auto}
+header{padding-block:28px 12px}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(2rem,6vw,2.8rem);line-height:1.05;margin:0;letter-spacing:-.01em;text-wrap:balance}
+h1 .k{color:var(--accent)}
+.lede{color:var(--muted);margin:8px 0 0;max-width:60ch}
+h2{font-family:var(--display);font-weight:800;font-size:1.45rem;margin:0 0 6px;text-wrap:balance}
+h3{font-family:var(--display);font-weight:600;font-size:1.1rem;margin:0 0 6px}
+p{margin:0 0 10px}
+.small{font-size:.88rem;color:var(--muted)}
+
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding-block:10px;border-bottom:1px solid var(--line);margin-bottom:20px;scrollbar-width:none}
+nav.tabs button{flex:0 0 auto;font:inherit;font-weight:700;font-size:.92rem;border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:8px 14px;border-radius:999px;cursor:pointer}
+nav.tabs button[aria-selected="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+button:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.chip{font:inherit;font-size:.88rem;border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:6px 12px;border-radius:999px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+
+.cat-intro{margin-bottom:12px}
+.phrases{display:grid;gap:0;border-top:1px solid var(--line)}
+.ph{display:grid;grid-template-columns:1fr auto;gap:4px 12px;padding-block:12px;border-bottom:1px solid var(--line)}
+.ph .sw{font-family:var(--display);font-weight:600;font-size:1.18rem;line-height:1.25;min-width:0}
+.ph .en{grid-column:1/2;color:var(--muted);min-width:0}
+.ph .note{grid-column:1/-1;font-size:.86rem;background:var(--sunk);padding:6px 10px;border-radius:6px}
+.say{grid-row:1/3;grid-column:2;align-self:center;font:inherit;font-size:.8rem;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:6px 10px;cursor:pointer}
+
+/* flashcards */
+.fc-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:12px}
+.fc-bar label{font-size:.88rem;color:var(--muted)}
+select{font:inherit;font-size:.92rem;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--fg)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;min-height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px 20px;cursor:pointer;user-select:none}
+.card .face{font-family:var(--display);font-weight:800;font-size:clamp(1.5rem,5vw,2.1rem);line-height:1.15;text-wrap:balance}
+.card .back{margin-top:14px;font-size:1.1rem}
+.card .back .n{display:block;margin-top:8px;font-size:.88rem;color:var(--muted)}
+.card .hint{margin-top:16px;font-size:.82rem;color:var(--muted)}
+.fc-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.btn{font:inherit;font-weight:700;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.progress{height:6px;background:var(--sunk);border-radius:99px;overflow:hidden;margin-top:14px}
+.progress span{display:block;height:100%;background:var(--subj);width:0;transition:width .3s}
+.fc-stats{display:flex;justify-content:space-between;font-size:.85rem;color:var(--muted);margin-top:6px;font-variant-numeric:tabular-nums}
+
+/* builder */
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 16px;font-family:var(--mono);font-size:.78rem}
+.legend span{padding:3px 8px;border-radius:5px}
+.l-s{background:var(--subj-bg);color:var(--subj)} .l-t{background:var(--tense-bg);color:var(--tense)} .l-n{background:var(--neg-bg);color:var(--neg)} .l-r{background:var(--root-bg);color:var(--root)}
+.b-group{margin-bottom:14px}
+.b-group h3{font-family:var(--mono);font-weight:500;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.out{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;margin:18px 0}
+.word{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 16px;font-family:var(--display);font-weight:800;font-size:clamp(1.25rem,4.6vw,1.9rem);line-height:1.1}
+.vw{display:inline-flex;flex-wrap:wrap;align-items:flex-end;gap:2px}
+.seg{display:inline-flex;flex-direction:column;align-items:center}
+.seg b{padding:2px 6px;border-radius:6px;font-weight:800}
+.seg i{font-style:normal;font-family:var(--mono);font-weight:500;font-size:.68rem;margin-top:4px;letter-spacing:.02em}
+.seg.s b{background:var(--subj-bg);color:var(--subj)} .seg.s i{color:var(--subj)}
+.seg.t b{background:var(--tense-bg);color:var(--tense)} .seg.t i{color:var(--tense)}
+.seg.n b{background:var(--neg-bg);color:var(--neg)} .seg.n i{color:var(--neg)}
+.seg.r b{background:var(--root-bg);color:var(--root)} .seg.r i{color:var(--muted)}
+.seg.x b{color:var(--muted);font-weight:600} .seg.x i{color:var(--muted)}
+.sentence{margin-top:16px;font-size:1.15rem}
+.sentence strong{font-family:var(--display)}
+.rule{margin-top:10px;font-size:.9rem;color:var(--muted)}
+
+/* how it works */
+.lesson{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:12px}
+.ex{font-family:var(--display);font-weight:600}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-weight:500;font-size:.75rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+td.sw{font-family:var(--display);font-weight:600}
+
+/* time */
+.clock{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0}
+.time-out{font-family:var(--display);font-weight:800;font-size:clamp(1.6rem,6vw,2.3rem);line-height:1.15;margin:12px 0 4px}
+.time-math{font-family:var(--mono);font-size:.82rem;color:var(--muted)}
+.sched td{font-variant-numeric:tabular-nums}
+
+/* word list */
+.search{margin-bottom:12px}
+.search input{width:100%;font:inherit;font-size:1rem;padding:11px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg);margin-top:4px}
+.search input:focus-visible{outline:3px solid var(--accent);outline-offset:1px}
+.wsec{margin-top:18px}
+.wsec h3{font-family:var(--mono);font-weight:500;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding-bottom:6px;border-bottom:1px solid var(--line);margin:0}
+.wsec .tip{font-size:.85rem;background:var(--sunk);padding:6px 10px;border-radius:6px;margin:8px 0 4px}
+.wrow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:4px 14px;padding-block:8px;border-bottom:1px solid var(--line)}
+.wrow .w{font-family:var(--display);font-weight:600;font-size:1.05rem;min-width:0;overflow-wrap:anywhere}
+.wrow .w .ku{color:var(--muted);font-weight:600}
+.wrow .w .pl{font-family:var(--body);font-weight:400;font-size:.88rem;color:var(--muted)}
+.wrow .m{min-width:0}
+.wrow .m .n{display:block;font-size:.84rem;color:var(--muted)}
+@media (max-width:480px){.wrow{grid-template-columns:1fr}}
+.seg.o b,.seg.oi b{background:var(--acc-bg);color:var(--accent)} .seg.o i,.seg.oi i{color:var(--accent)}
+.seg .ag{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px}
+.l-o{background:var(--acc-bg);color:var(--accent)}
+.rules{margin:12px 0 0;padding-left:18px;font-size:.9rem;color:var(--muted)} .rules li+li{margin-top:4px}
+.b-actions{display:flex;flex-wrap:wrap;gap:10px;margin:-6px 0 18px}
+.b-grid{display:grid;gap:18px 22px;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))}
+.b-grid .b-group{margin:0;min-width:0}
+.b-group select{width:100%;margin-top:6px}
+.chips.num{margin:8px 0 0}
+@media (min-width:700px) and (min-height:820px){.out{position:sticky;top:calc(env(safe-area-inset-top,0px) + 58px);z-index:4;box-shadow:0 10px 24px -18px rgba(0,0,0,.5)}}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Kiswahili <span class="k">Kila Siku</span></h1>
+  <p class="lede">Swahili for every day at the college and at home. Phrases for the people you meet, a searchable word list, flashcards to practise both, and a verb builder that shows how Swahili sentences are put together.</p>
+</header>
+
+<nav class="tabs" role="tablist">
+  <button role="tab" id="tab-phrases" aria-selected="true" data-panel="phrases">Phrases</button>
+  <button role="tab" id="tab-words" aria-selected="false" data-panel="words">Word list</button>
+  <button role="tab" id="tab-cards" aria-selected="false" data-panel="cards">Flashcards</button>
+  <button role="tab" id="tab-build" aria-selected="false" data-panel="build">Build a sentence</button>
+  <button role="tab" id="tab-how" aria-selected="false" data-panel="how">How Swahili works</button>
+  <button role="tab" id="tab-time" aria-selected="false" data-panel="time">Swahili time</button>
+</nav>
+
+<!-- PHRASES -->
+<section id="phrases" role="tabpanel">
+  <div class="chips" id="catChips"></div>
+  <p class="cat-intro small" id="catIntro"></p>
+  <div class="phrases" id="phraseList"></div>
+</section>
+
+<!-- WORD LIST -->
+<section id="words" role="tabpanel" hidden>
+  <div class="search">
+    <label for="wSearch" class="small">Search in Swahili or English</label>
+    <input id="wSearch" type="search" placeholder="e.g. water, kitabu, teach" autocomplete="off">
+  </div>
+  <div class="chips" id="wChips"></div>
+  <p class="small" id="wInfo"></p>
+  <div id="wList"></div>
+  <p class="small" style="margin-top:16px">Nouns show the plural in brackets. Verbs are listed as <b>ku</b> + root: drop the <b>ku</b> and the root goes into the verb builder pattern (ku<b>soma</b> → ni-na-<b>soma</b>). Every topic here is also a flashcard deck.</p>
+</section>
+
+<!-- FLASHCARDS -->
+<section id="cards" role="tabpanel" hidden>
+  <div class="fc-bar">
+    <div><label for="fcCat">Topic</label><br><select id="fcCat"></select></div>
+    <div><label for="fcDir">Show first</label><br>
+      <select id="fcDir"><option value="sw">Swahili</option><option value="en">English</option></select></div>
+    <button class="btn" id="fcReset" type="button">Start over</button>
+  </div>
+  <div class="card" id="card" tabindex="0" role="button" aria-label="Flashcard, tap to turn over">
+    <div class="face" id="cardFace"></div>
+    <div class="back" id="cardBack" hidden></div>
+    <div class="hint" id="cardHint">Say it out loud, then tap to check</div>
+  </div>
+  <div class="fc-actions">
+    <button class="btn" id="fcAgain" type="button">Again later</button>
+    <button class="btn primary" id="fcGot" type="button">I knew it</button>
+  </div>
+  <div class="progress"><span id="fcProg"></span></div>
+  <div class="fc-stats"><span id="fcCount"></span><span id="fcLeft"></span></div>
+</section>
+
+<!-- BUILDER -->
+<section id="build" role="tabpanel" hidden>
+  <h2>Build a sentence</h2>
+  <p>Every verb and noun from the word list works here. Choose who does it, when, and the verb. Then add a person inside the verb, a thing after it, a place or a time. The colours show how the pieces fit together.</p>
+  <div class="legend"><span class="l-s">who</span><span class="l-t">when</span><span class="l-n">not</span><span class="l-r">verb root</span><span class="l-o">to whom, what</span></div>
+
+  <div class="out" aria-live="polite">
+    <div class="word" id="bWord"></div>
+    <div class="sentence" id="bSentence"></div>
+    <ul class="rules" id="bRules"></ul>
+  </div>
+  <div class="b-actions">
+    <button class="btn primary" id="bRandom" type="button">Random sentence</button>
+    <button class="btn" id="bClear" type="button">Clear extras</button>
+    <button class="btn" id="bHear" type="button" hidden>▶ Hear it</button>
+  </div>
+
+  <div class="b-grid">
+    <div class="b-group">
+      <h3>Who or what does it</h3>
+      <div class="chips" id="bWho"></div>
+      <select id="bSubjN" aria-label="Or choose a person or thing as the subject"></select>
+      <div class="chips num" id="bSubjNum"></div>
+    </div>
+    <div class="b-group">
+      <h3>Verb</h3>
+      <select id="bVerb" aria-label="Verb"></select>
+      <h3 style="margin-top:14px">When</h3><div class="chips" id="bWhen"></div>
+      <h3 style="margin-top:8px">Yes or not</h3><div class="chips" id="bPol"></div>
+    </div>
+    <div class="b-group" id="gInf">
+      <h3>To whom (goes inside the verb)</h3>
+      <div class="chips" id="bInf"></div>
+      <p class="small" id="bInfNote" hidden></p>
+    </div>
+    <div class="b-group" id="gObj">
+      <h3>What (after the verb)</h3>
+      <select id="bObj" aria-label="Thing after the verb"></select>
+      <div class="chips num" id="bObjNum"></div>
+      <div id="objMore">
+        <div class="chips" id="bPoss" style="margin-top:8px"></div>
+        <select id="bAdj" aria-label="Describing word"></select>
+      </div>
+      <p class="small" id="bObjNote" hidden></p>
+    </div>
+    <div class="b-group">
+      <h3>Where</h3>
+      <select id="bPlace" aria-label="Place"></select>
+    </div>
+    <div class="b-group">
+      <h3>When or how</h3>
+      <select id="bExtra" aria-label="Time or manner word"></select>
+    </div>
+  </div>
+
+  <div class="lesson" style="margin-top:20px">
+    <h3>The verb pattern</h3>
+    <div class="tablewrap"><table>
+      <tr><th>Who</th><th>Yes</th><th>Not</th><th>To whom</th></tr>
+      <tr><td>I (mimi)</td><td class="sw">ni-</td><td class="sw">si-</td><td class="sw">-ni- me</td></tr>
+      <tr><td>you (wewe)</td><td class="sw">u-</td><td class="sw">hu-</td><td class="sw">-ku- you</td></tr>
+      <tr><td>he, she (yeye)</td><td class="sw">a-</td><td class="sw">ha-</td><td class="sw">-m- him, her</td></tr>
+      <tr><td>we (sisi)</td><td class="sw">tu-</td><td class="sw">hatu-</td><td class="sw">-tu- us</td></tr>
+      <tr><td>you all (ninyi)</td><td class="sw">m-</td><td class="sw">ham-</td><td class="sw">-wa- you all</td></tr>
+      <tr><td>they (wao)</td><td class="sw">wa-</td><td class="sw">hawa-</td><td class="sw">-wa- them</td></tr>
+    </table></div>
+    <p class="small" style="margin-top:10px">When: <b>-na-</b> now, <b>-li-</b> past, <b>-ta-</b> future, <b>-me-</b> done. Order inside the verb: who, when, to whom, root.</p>
+  </div>
+  <div class="lesson">
+    <h3>How a noun changes the words around it</h3>
+    <div class="tablewrap"><table>
+      <tr><th>Family</th><th>One / many</th><th>Verb starts</th><th>"my"</th><th>"new"</th></tr>
+      <tr><td>people, animals</td><td class="sw">mwalimu / walimu</td><td class="sw">a- / wa-</td><td class="sw">wangu</td><td class="sw">mpya / wapya</td></tr>
+      <tr><td>m- / mi-</td><td class="sw">mti / miti</td><td class="sw">u- / i-</td><td class="sw">wangu / yangu</td><td class="sw">mpya / mipya</td></tr>
+      <tr><td>ji- / ma-</td><td class="sw">darasa / madarasa</td><td class="sw">li- / ya-</td><td class="sw">langu / yangu</td><td class="sw">jipya / mapya</td></tr>
+      <tr><td>ki- / vi-</td><td class="sw">kitabu / vitabu</td><td class="sw">ki- / vi-</td><td class="sw">changu / vyangu</td><td class="sw">kipya / vipya</td></tr>
+      <tr><td>n-</td><td class="sw">nyumba / nyumba</td><td class="sw">i- / zi-</td><td class="sw">yangu / zangu</td><td class="sw">mpya / mpya</td></tr>
+      <tr><td>u-</td><td class="sw">ufunguo / funguo</td><td class="sw">u- / zi-</td><td class="sw">wangu / zangu</td><td class="sw">mpya / mpya</td></tr>
+    </table></div>
+    <p class="small" style="margin-top:10px">Family words like mama, dada and rafiki use a- / wa- on the verb but say <b>yangu</b> / <b>zangu</b>: mama yangu, rafiki zangu.</p>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how" role="tabpanel" hidden>
+  <div class="lesson">
+    <h3>1. Pronunciation is easy</h3>
+    <p>Read every letter as written. The vowels sound as in German or Italian: a, e, i, o, u. Stress almost always falls on the second to last syllable: a-<b>SA</b>-nte, ta-fa-<b>DHA</b>-li, ki-swa-<b>HI</b>-li.</p>
+    <p class="small"><b>dh</b> sounds like "th" in "this". <b>ng'</b> (with the apostrophe) sounds like the end of "sing". <b>r</b> is a light tap.</p>
+  </div>
+  <div class="lesson">
+    <h3>2. Giving instructions to the class</h3>
+    <p>The bare verb is a command to one person. Change the final <b>-a</b> to <b>-eni</b> and you speak to the whole group.</p>
+    <div class="tablewrap"><table>
+      <tr><th>To one</th><th>To the class</th><th>Meaning</th></tr>
+      <tr><td class="sw">Sikiliza</td><td class="sw">Sikilizeni</td><td>listen</td></tr>
+      <tr><td class="sw">Andika</td><td class="sw">Andikeni</td><td>write</td></tr>
+      <tr><td class="sw">Angalia</td><td class="sw">Angalieni</td><td>look</td></tr>
+      <tr><td class="sw">Kaa</td><td class="sw">Kaeni</td><td>sit</td></tr>
+      <tr><td class="sw">Jaribu</td><td class="sw">Jaribuni</td><td>try (verbs ending in -u add -ni)</td></tr>
+    </table></div>
+    <p class="small" style="margin-top:10px">The same works for greetings and thanks: Karibu becomes Karibuni, Asante becomes Asanteni, Kwa heri becomes Kwa herini.</p>
+  </div>
+  <div class="lesson">
+    <h3>3. "Me", "you" and "them" go inside the verb</h3>
+    <p>The object slips in right before the verb root.</p>
+    <p class="ex">Ni-na-<span style="color:var(--accent)">ku</span>-penda <span class="small">I like you</span></p>
+    <p class="ex">Unaweza ku-<span style="color:var(--accent)">ni</span>-saidia? <span class="small">Can you help me?</span></p>
+    <p class="ex">Ni-na-<span style="color:var(--accent)">wa</span>-fundisha <span class="small">I am teaching them</span></p>
+    <p class="small">Object pieces: -ni- me, -ku- you, -m- him or her, -tu- us, -wa- them.</p>
+  </div>
+  <div class="lesson">
+    <h3>4. Nouns come in families</h3>
+    <p>Each noun belongs to a class, and the class decides its plural and the words that agree with it. Start with the two you will hear most.</p>
+    <div class="tablewrap"><table>
+      <tr><th>Family</th><th>One</th><th>Many</th><th>"my"</th></tr>
+      <tr><td>People (m- / wa-)</td><td class="sw">mwalimu, mwanafunzi, mtoto</td><td class="sw">walimu, wanafunzi, watoto</td><td class="sw">mwalimu wangu</td></tr>
+      <tr><td>Things (ki- / vi-)</td><td class="sw">kitabu, kiti, kikundi</td><td class="sw">vitabu, viti, vikundi</td><td class="sw">kitabu changu, vitabu vyangu</td></tr>
+      <tr><td>Many others (n-)</td><td class="sw">nyumba, bei, chai</td><td class="sw">nyumba, bei, chai</td><td class="sw">nyumba yangu</td></tr>
+      <tr><td>Some (ji- / ma-)</td><td class="sw">darasa, wazo, swali</td><td class="sw">madarasa, mawazo, maswali</td><td class="sw">darasa langu, wazo langu</td></tr>
+    </table></div>
+    <p class="small" style="margin-top:10px">If you mix these up, people still understand you. Learn them as fixed pairs ("wazo langu", "kitabu changu") and the pattern settles in by itself.</p>
+  </div>
+  <div class="lesson">
+    <h3>5. Asking questions</h3>
+    <p>Keep normal word order and raise your voice at the end. Question words usually go last.</p>
+    <p class="ex">Unaenda wapi? <span class="small">Where are you going?</span></p>
+    <p class="ex">Hii ni nini? <span class="small">What is this?</span></p>
+    <p class="ex">Tunaanza saa ngapi? <span class="small">What time do we start?</span></p>
+    <p class="small">wapi where · nini what · nani who · lini when · ngapi how many · vipi / -je how</p>
+  </div>
+  <div class="lesson">
+    <h3>6. Shortcuts you will hear</h3>
+    <p><b>Nataka</b> is the everyday form of <b>ninataka</b> (I want). <b>Naomba</b> (I ask for) is the polite way to request anything: "Naomba maji", "Naomba msaada". In the classroom, "Mmeelewa?" (did you understand?) almost always gets a polite "Ndio". Asking students to explain in their own words tells you more.</p>
+  </div>
+</section>
+
+<!-- TIME -->
+<section id="time" role="tabpanel" hidden>
+  <h2>Swahili time starts at sunrise</h2>
+  <p>The Swahili day begins at 7 in the morning, which is <b>saa moja</b> (hour one). Take the clock time and subtract 6 hours. When the students say "saa mbili", they mean 8 o'clock.</p>
+  <div class="clock">
+    <div><label class="small" for="tHour">Clock time</label><br><select id="tHour"></select></div>
+    <div><label class="small" for="tMin">Minutes</label><br>
+      <select id="tMin"><option value="0">:00</option><option value="15">:15</option><option value="30">:30</option><option value="45">:45</option></select></div>
+  </div>
+  <div class="time-out" id="tOut"></div>
+  <div class="time-math" id="tMath"></div>
+
+  <div class="lesson" style="margin-top:20px">
+    <h3>The course day in Swahili time</h3>
+    <div class="tablewrap"><table class="sched">
+      <tr><th>Clock</th><th>Swahili</th><th>What</th></tr>
+      <tr><td>08:00</td><td class="sw">saa mbili asubuhi</td><td>Lecture starts</td></tr>
+      <tr><td>11:00</td><td class="sw">saa tano asubuhi</td><td>Tea break</td></tr>
+      <tr><td>14:30</td><td class="sw">saa nane na nusu mchana</td><td>Lunch</td></tr>
+      <tr><td>15:30</td><td class="sw">saa tisa na nusu mchana</td><td>Drop-in support</td></tr>
+      <tr><td>17:00</td><td class="sw">saa kumi na moja jioni</td><td>End of the day</td></tr>
+    </table></div>
+    <p class="small" style="margin-top:10px">na robo = quarter past · na nusu = half past · kasorobo = quarter to. Parts of the day: alfajiri (dawn), asubuhi (morning), mchana (midday, afternoon), jioni (evening), usiku (night).</p>
+  </div>
+</section>
+</div>
+
+<script>
+const CATS = [
+ {id:"salamu", name:"Greetings", intro:"Greetings matter a lot in Tanzania. Greet before you ask anything, even in a shop.", items:[
+  ["Habari?","How are you? (literally: news?)","Answer: Nzuri (good) or Salama (peaceful)."],
+  ["Habari za asubuhi?","Good morning, how is the morning?","Answer: Nzuri. Change the time of day: Habari za mchana? Habari za jioni?"],
+  ["Hujambo? · Sijambo","Are you well? · I am well","To a group: Hamjambo? They answer: Hatujambo."],
+  ["Shikamoo · Marahaba","Respectful greeting to an elder · the elder's reply","Students may greet you with Shikamoo. You answer Marahaba."],
+  ["Mambo? · Poa","What's up? · Cool","Casual, between young people and friends. Safi also works as an answer."],
+  ["Karibu / Karibuni","Welcome (to one / to many)","Also the answer to Asante: you're welcome."],
+  ["Asante sana","Thank you very much","To a group: Asanteni."],
+  ["Tafadhali","Please",""],
+  ["Samahani","Excuse me, sorry","For something you did, or to get attention."],
+  ["Pole","I'm sorry for you","Sympathy when someone is tired, ill or had bad luck. Answer: Asante."],
+  ["Kwa heri / Kwa herini","Goodbye (to one / to many)",""],
+  ["Tutaonana","See you later",""],
+  ["Usiku mwema","Good night",""],
+  ["Ndio / Hapana","Yes / No",""],
+  ["Sawa","OK, fine",""],
+  ["Hakuna shida","No problem",""]
+ ]},
+ {id:"kujifunza", name:"Learning Swahili", intro:"Phrases that keep a conversation going while you learn.", items:[
+  ["Jina langu ni Caroline","My name is Caroline",""],
+  ["Jina lako nani?","What is your name?","Also common: Unaitwa nani?"],
+  ["Ninatoka Uswisi","I come from Switzerland",""],
+  ["Ninajifunza Kiswahili","I am learning Swahili",""],
+  ["Ninaongea Kiswahili kidogo tu","I speak only a little Swahili",""],
+  ["Sielewi","I don't understand",""],
+  ["Sema tena, tafadhali","Say it again, please",""],
+  ["Polepole, tafadhali","Slowly, please",""],
+  ["Hii ni nini?","What is this?",""],
+  ["Unasemaje ... kwa Kiswahili?","How do you say ... in Swahili?",""],
+  ["Maana yake nini?","What does it mean?",""],
+  ["Nifundishe neno moja","Teach me one word",""],
+  ["Asante sana kwa kunifundisha","Thank you very much for teaching me",""]
+ ]},
+ {id:"darasani", name:"Classroom", intro:"Instructions to the whole class end in -eni. See How Swahili works, lesson 2.", items:[
+  ["Habari za asubuhi, wanafunzi!","Good morning, students!",""],
+  ["Tuanze","Let's start",""],
+  ["Sikilizeni","Listen (everyone)",""],
+  ["Angalieni hapa","Look here (everyone)",""],
+  ["Andikeni","Write (everyone)",""],
+  ["Kaeni / Simameni","Sit down / Stand up (everyone)",""],
+  ["Fanyeni kazi katika vikundi","Work in groups",""],
+  ["Dakika tano zaidi","Five more minutes",""],
+  ["Muda umekwisha","Time is up",""],
+  ["Nani anataka kuanza?","Who wants to start?",""],
+  ["Vizuri sana!","Very good!",""],
+  ["Hongera!","Well done! Congratulations!",""],
+  ["Jaribuni tena","Try again (everyone)",""],
+  ["Mna maswali?","Do you have questions?",""],
+  ["Niambieni kwa maneno yenu","Tell me in your own words","Better than asking 'Mmeelewa?', which students answer with a polite yes."],
+  ["Ni sawa kusema hapana","It is okay to say no",""],
+  ["Wazo lako la biashara ni nini?","What is your business idea?",""],
+  ["Wateja wako ni nani?","Who are your customers?",""],
+  ["Mapumziko","Break",""]
+ ]},
+ {id:"kazini", name:"Teachers & staff", intro:"For the staff room, the office and planning the day.", items:[
+  ["Habari za kazi?","How is work going?","Answer: Nzuri or Salama."],
+  ["Pole na kazi","Respect for your hard work","A kind thing to say to anyone working. Answer: Asante."],
+  ["Naomba msaada","May I ask for help?",""],
+  ["Unaweza kunisaidia?","Can you help me?",""],
+  ["Tunaanza saa ngapi?","What time do we start?","The answer comes in Swahili time. See the Swahili time tab."],
+  ["Darasa liko wapi?","Where is the classroom?",""],
+  ["Mwalimu / Walimu","Teacher / Teachers",""],
+  ["Mkutano ni saa ngapi?","What time is the meeting?",""],
+  ["Asante kwa ushirikiano","Thank you for working together",""],
+  ["Samahani, nimechelewa","Sorry, I'm late",""],
+  ["Tutaonana kesho","See you tomorrow",""]
+ ]},
+ {id:"nyumbani", name:"At home", intro:"For the people you live with.", items:[
+  ["Umeamkaje?","Good morning (how did you wake up?)","Answer: Salama or Nzuri."],
+  ["Umelalaje?","How did you sleep?","Answer: Salama."],
+  ["Karibu chakula","Come and eat with us","An invitation. Accept with Asante."],
+  ["Chakula ni kitamu sana","The food is very tasty",""],
+  ["Nimeshiba, asante","I'm full, thank you",""],
+  ["Naomba maji","May I have some water?",""],
+  ["Choo kiko wapi?","Where is the toilet?",""],
+  ["Ninaweza kusaidia?","Can I help?",""],
+  ["Ninaenda kazini","I'm going to work",""],
+  ["Nitarudi saa kumi na moja jioni","I'll be back at 5 pm","Swahili time again: saa kumi na moja is hour eleven, 5 pm."],
+  ["Nimechoka","I'm tired",""],
+  ["Ninaenda kulala","I'm going to bed",""],
+  ["Lala salama","Sleep well",""]
+ ]},
+ {id:"sokoni", name:"Market & transport", intro:"Shops, the market, bajaji and daladala.", items:[
+  ["Bei gani?","How much is it?",""],
+  ["Shilingi ngapi?","How many shillings?",""],
+  ["Ghali sana!","Very expensive!",""],
+  ["Punguza kidogo","Lower the price a little",""],
+  ["Nataka hii","I want this one",""],
+  ["Sitaki, asante","I don't want it, thank you",""],
+  ["Nishushe hapa","Drop me off here","For the bajaji or daladala driver."],
+  ["Twende!","Let's go!",""]
+ ]},
+ {id:"namba", name:"Numbers", intro:"Prices are in thousands: elfu tano is 5,000 TSh.", items:[
+  ["moja","1",""],["mbili","2",""],["tatu","3",""],["nne","4",""],["tano","5",""],
+  ["sita","6",""],["saba","7",""],["nane","8",""],["tisa","9",""],["kumi","10",""],
+  ["kumi na moja","11","Then kumi na mbili, kumi na tatu..."],
+  ["ishirini","20",""],["thelathini","30",""],["arobaini","40",""],["hamsini","50",""],
+  ["mia moja","100",""],["elfu moja","1,000",""],["elfu tano","5,000",""],["elfu kumi","10,000",""]
+ ]}
+];
+
+/* WORD LIST DATA: "swahili|english|note". Nouns: singular (plural). Verbs marked verb:true */
+const DICT=[
+ {id:"w-people",name:"People & family",items:`
+mtu (watu)|person
+mwanamume (wanaume)|man
+mwanamke (wanawake)|woman
+mtoto (watoto)|child
+mvulana (wavulana)|boy
+msichana (wasichana)|girl
+kijana (vijana)|young person
+mzee (wazee)|elder, old person|A respectful word. Shikamoo is said to wazee.
+rafiki (marafiki)|friend
+jirani (majirani)|neighbour
+mgeni (wageni)|guest, visitor, stranger
+mwenyeji (wenyeji)|host, local person
+familia|family
+mama|mother, also a respectful way to address a woman
+baba|father, also a respectful way to address a man
+mzazi (wazazi)|parent
+dada|sister, also a young woman
+kaka|brother, also a young man
+ndugu|sibling, relative
+bibi|grandmother, also Mrs or lady
+babu|grandfather
+shangazi|aunt (father's sister)
+mjomba|uncle (mother's brother)
+mume|husband
+mke|wife
+mtoto wa kwanza|first-born child
+Mtanzania (Watanzania)|Tanzanian person
+mzungu (wazungu)|white person, European|You will hear this often, usually friendly.
+bwana|gentleman, mister, sir`},
+ {id:"w-school",name:"School & classroom",items:`
+mwalimu (walimu)|teacher
+mwanafunzi (wanafunzi)|student
+mkuu wa chuo|head of the college
+chuo (vyuo)|college
+chuo cha ufundi|vocational training college
+shule|school
+darasa (madarasa)|classroom, class
+somo (masomo)|lesson, subject
+kitabu (vitabu)|book
+kitabu cha mwanafunzi|student workbook
+daftari (madaftari)|exercise book, notebook
+kalamu|pen
+penseli|pencil
+karatasi|paper
+ubao (mbao)|board, blackboard
+chaki|chalk
+kifutio (vifutio)|eraser
+meza|table, desk
+kiti (viti)|chair
+swali (maswali)|question
+jibu (majibu)|answer
+kazi|work, task, job
+kazi ya nyumbani|homework
+mtihani (mitihani)|exam, test
+mfano (mifano)|example
+kikundi (vikundi)|group
+neno (maneno)|word
+sentensi|sentence
+lugha|language
+Kiswahili|Swahili
+Kiingereza|English
+Kifaransa|French
+Kijerumani|German
+ukurasa (kurasa)|page
+picha|picture, photo
+ratiba|timetable, schedule
+cheti (vyeti)|certificate
+mafunzo|training
+ujuzi|skill(s)
+maarifa|knowledge
+onyesho (maonyesho)|presentation, show|Maonyesho Mafupi = mini-presentations.
+hatua|step|Hatua ya 1 = step 1
+maelezo|explanation, instructions
+tathmini|assessment
+mapumziko|break`},
+ {id:"w-business",name:"Business & money",items:`
+biashara|business, trade
+mfanyabiashara (wafanyabiashara)|business person
+mjasiriamali (wajasiriamali)|entrepreneur
+ujasiriamali|entrepreneurship
+mteja (wateja)|customer
+bidhaa|product(s), goods
+huduma|service
+bei|price
+gharama|cost(s)
+gharama zinazobadilika|variable costs
+gharama zisizobadilika|fixed costs
+kipato|income
+faida|profit
+hasara|loss
+mauzo|sales
+mtaji|capital (start-up money)
+mkopo (mikopo)|loan
+riba|interest (on a loan)
+akiba|savings
+deni (madeni)|debt
+malipo|payment
+malipo ya awali|deposit, advance payment
+mshahara|salary
+soko (masoko)|market
+duka (maduka)|shop
+mshindani (washindani)|competitor
+ushindani|competition
+msambazaji (wasambazaji)|supplier
+mpango (mipango)|plan
+mpango wa biashara|business plan
+wazo (mawazo)|idea
+wazo la biashara|business idea
+tatizo (matatizo)|problem
+suluhisho|solution
+ubora|quality
+tangazo (matangazo)|advertisement
+leseni|licence
+usajili|registration
+kodi|tax, also rent
+kodi ya nyumba|house rent
+mfanyakazi (wafanyakazi)|worker, employee
+mwajiri (waajiri)|employer
+ajira|employment, job
+mkataba (mikataba)|contract
+risiti|receipt
+hesabu|accounts, calculation, maths
+mkakati wa bei|pricing strategy
+mchango wa faida|contribution margin
+uchambuzi wa kujitegemea|break-even analysis
+VICOBA|village community savings bank
+pesa / fedha|money
+shilingi|shilling
+chenji|change (money back)
+punguzo|discount
+nauli|fare (transport)
+mfuko (mifuko)|bag, also fund
+mia|hundred
+elfu|thousand
+laki|hundred thousand
+milioni|million
+M-Pesa|mobile money
+salio|balance (on account or phone)
+vocha|airtime voucher
+bando|data bundle`},
+ {id:"w-trades",name:"Trades & tools",items:`
+fundi (mafundi)|craftsperson, technician
+fundi cherehani|tailor
+cherehani|sewing machine
+kitambaa (vitambaa)|fabric, cloth
+uzi|thread
+sindano|needle
+mkasi (mikasi)|scissors
+tepu ya kupimia|measuring tape
+nguo|clothes
+gauni (magauni)|dress
+shati (mashati)|shirt
+suruali|trousers
+sare|uniform
+kitenge (vitenge)|printed cloth, kitenge
+mwokaji (waokaji)|baker
+oveni|oven
+unga|flour
+chachu|yeast
+keki|cake
+fundi umeme|electrician
+umeme|electricity
+waya|wire
+swichi|switch
+soketi|socket
+taa|lamp, light
+umeme wa jua|solar power
+seremala (maseremala)|carpenter
+mbao|timber, planks
+msumeno (misumeno)|saw
+nyundo|hammer
+msumari (misumari)|nail
+fundi chuma|welder, metalworker
+chuma (vyuma)|iron, metal
+fundi magari|car mechanic
+spana|spanner
+fundi bomba|plumber
+bomba (mabomba)|pipe, tap
+mpishi (wapishi)|cook
+msusi (wasusi)|hairdresser, braider
+saluni|salon
+mkulima (wakulima)|farmer
+shamba (mashamba)|farm, field
+mbegu|seed(s)
+mbolea|fertiliser
+kifaa (vifaa)|tool, piece of equipment
+vifaa vya kazi|work tools
+mashine|machine
+rangi|paint, colour
+karakana|workshop
+usalama|safety`},
+ {id:"w-home",name:"House & home",items:`
+nyumba|house
+nyumbani|at home
+chumba (vyumba)|room
+chumba cha kulala|bedroom
+sebule|living room
+jiko (majiko)|kitchen, stove
+choo (vyoo)|toilet
+bafu|bathroom
+mlango (milango)|door
+dirisha (madirisha)|window
+kitanda (vitanda)|bed
+chandarua|mosquito net
+godoro (magodoro)|mattress
+mto (mito)|pillow, also river
+ufunguo (funguo)|key
+maji|water
+maji ya moto|hot water
+ndoo|bucket
+sabuni|soap
+taulo|towel
+kioo (vioo)|mirror, glass
+tochi|torch
+betri|battery
+chaja|charger
+simu|phone
+mwanga|light
+giza|darkness
+umeme umekatika|the power is off|You may hear this often.
+ukuta (kuta)|wall
+paa|roof
+sakafu|floor
+uwanja|yard, compound, field
+geti|gate`},
+ {id:"w-food",name:"Food & drink",items:`
+chakula (vyakula)|food
+kifungua kinywa|breakfast
+chakula cha mchana|lunch
+chakula cha jioni|dinner
+chai|tea
+kahawa|coffee
+maziwa|milk
+sukari|sugar
+chumvi|salt
+pilipili|pepper, chilli
+mafuta|oil
+wali|rice (cooked)
+mchele|rice (uncooked)
+ugali|stiff maize porridge
+ndizi|banana, plantain
+maharage|beans
+nyama|meat
+kuku|chicken
+samaki|fish
+yai (mayai)|egg
+mboga|vegetables, side dish
+mchicha|leafy greens (amaranth)
+nyanya|tomato
+kitunguu (vitunguu)|onion
+kitunguu saumu|garlic
+viazi|potatoes
+muhogo (mihogo)|cassava
+chapati|chapati
+andazi (maandazi)|sweet fried bread
+tunda (matunda)|fruit
+embe (maembe)|mango
+nanasi (mananasi)|pineapple
+parachichi (maparachichi)|avocado
+chungwa (machungwa)|orange
+nazi|coconut
+juisi|juice
+chipsi mayai|chips omelette
+kikombe (vikombe)|cup
+sahani|plate
+kijiko (vijiko)|spoon
+uma|fork
+kisu (visu)|knife
+sufuria|cooking pot
+-tamu|sweet, tasty|chakula kitamu = tasty food
+njaa|hunger|Nina njaa = I am hungry
+kiu|thirst|Nina kiu = I am thirsty`},
+ {id:"w-body",name:"Body & health",items:`
+mwili|body
+kichwa (vichwa)|head
+jicho (macho)|eye
+sikio (masikio)|ear
+pua|nose
+mdomo (midomo)|mouth
+jino (meno)|tooth
+mkono (mikono)|hand, arm
+mguu (miguu)|leg, foot
+tumbo|stomach
+mgongo|back
+moyo|heart
+damu|blood
+ugonjwa|illness
+mgonjwa (wagonjwa)|sick person, ill
+homa|fever
+malaria|malaria
+maumivu|pain|Kichwa kinauma = my head hurts
+dawa|medicine
+daktari (madaktari)|doctor
+muuguzi (wauguzi)|nurse
+hospitali|hospital
+zahanati|clinic, dispensary
+duka la dawa|pharmacy
+Ninaumwa|I am ill`},
+ {id:"w-time",name:"Time & days",items:`
+leo|today
+jana|yesterday
+kesho|tomorrow
+juzi|the day before yesterday
+kesho kutwa|the day after tomorrow
+sasa|now
+sasa hivi|right now
+baadaye|later
+mapema|early
+siku|day
+wiki|week
+mwisho wa wiki|weekend
+mwezi (miezi)|month, also moon
+mwaka (miaka)|year
+saa|hour, clock, watch
+dakika|minute
+wakati|time, while
+muda|period of time
+asubuhi|morning
+mchana|midday, afternoon
+jioni|evening
+usiku|night
+alfajiri|dawn
+Jumatatu|Monday
+Jumanne|Tuesday
+Jumatano|Wednesday
+Alhamisi|Thursday
+Ijumaa|Friday
+Jumamosi|Saturday
+Jumapili|Sunday
+Oktoba|October|Months are close to English: Januari, Februari, Machi, Aprili, Mei, Juni, Julai, Agosti, Septemba, Oktoba, Novemba, Desemba.`},
+ {id:"w-places",name:"Places & getting around",items:`
+mji (miji)|town
+jiji (majiji)|city
+kijiji (vijiji)|village
+mtaa (mitaa)|street, neighbourhood
+barabara|road
+njia|way, path
+benki|bank
+ofisi|office
+kanisa (makanisa)|church
+msikiti (misikiti)|mosque
+posta|post office
+kituo (vituo)|station, stop
+kituo cha basi|bus stop
+uwanja wa ndege|airport
+pwani|coast, beach
+bahari|sea
+daladala|minibus
+bajaji|three-wheeler taxi
+bodaboda|motorbike taxi
+basi (mabasi)|bus
+gari (magari)|car, vehicle
+pikipiki|motorbike
+baiskeli|bicycle
+dereva (madereva)|driver
+tiketi|ticket
+safari|journey, trip
+kushoto|left
+kulia|right
+moja kwa moja|straight on
+hapa|here
+pale|there
+karibu|near, also welcome
+mbali|far
+mbele|in front, ahead
+nyuma|behind
+ndani|inside
+nje|outside
+juu|up, above
+chini|down, below`},
+ {id:"w-describe",name:"Describing words",tip:"Adjectives with a dash take the noun's prefix: mtoto mzuri, watoto wazuri, kitabu kizuri, vitabu vizuri, nyumba nzuri. Words without a dash never change.",items:`
+-zuri|good, beautiful
+-baya|bad
+-kubwa|big
+-dogo|small
+-refu|long, tall
+-fupi|short
+-pya|new
+-zee|old
+-ingi|many, a lot|watu wengi = many people
+-chache|few
+-zito|heavy, difficult
+-epesi|light, easy
+-kali|sharp, strict, fierce
+-ote|all|watu wote = all the people
+-ingine|other, another
+-eupe|white
+-eusi|black
+-ekundu|red
+kijani|green
+njano|yellow
+bluu|blue
+kahawia|brown
+kijivu|grey
+zambarau|purple
+safi|clean, also great
+chafu|dirty
+moto|hot
+baridi|cold
+rahisi|easy, cheap
+ghali|expensive
+ngumu|hard, difficult
+muhimu|important
+tayari|ready, already
+haraka|fast, quickly
+polepole|slow, slowly
+kweli|true
+sawa|same, OK
+tofauti|different
+bora|best, better`},
+ {id:"w-feel",name:"Feelings & weather",items:`
+furaha|happiness|Nina furaha = I am happy
+huzuni|sadness
+hasira|anger
+hofu|fear
+upendo|love
+amani|peace
+matumaini|hope
+nimechoka|I am tired
+nimefurahi|I am pleased
+hali ya hewa|weather
+jua|sun
+mvua|rain|Mvua inanyesha = it is raining
+vuli|short rains (around October to December)
+masika|long rains (around March to May)
+upepo|wind
+wingu (mawingu)|cloud
+joto|heat|Kuna joto = it is hot
+mti (miti)|tree
+ua (maua)|flower
+mnyama (wanyama)|animal
+mbwa|dog
+paka|cat
+ng'ombe|cow
+mbuzi|goat
+mbu|mosquito
+nyoka|snake
+ndege|bird, also aeroplane
+jiwe (mawe)|stone
+mchanga|sand`},
+ {id:"w-little",name:"Small but vital words",tip:"Possessives agree with the noun too: mwalimu wangu, kitabu changu, darasa langu, nyumba yangu.",items:`
+mimi|I, me
+wewe|you (one person)
+yeye|he, she
+sisi|we
+ninyi|you (several people)
+wao|they
+-angu|my
+-ako|your (one person)
+-ake|his, her
+-etu|our
+-enu|your (several people)
+-ao|their
+nini|what
+nani|who
+wapi|where
+lini|when
+kwa nini|why
+vipi / -je|how
+-ngapi|how many|watu wangapi? = how many people?
+gani|which, what kind
+je|starts a yes or no question
+na|and, with
+au|or
+lakini|but
+kwa sababu|because
+kwa hiyo|so, therefore
+kama|if, like
+halafu|then, afterwards
+pia|also
+tu|only, just
+sana|very, a lot
+kidogo|a little
+zaidi|more
+bado|still, not yet
+labda|maybe
+hata|even
+kila|every|kila siku = every day
+kuna|there is, there are
+hakuna|there is no, there are none
+nina / sina|I have / I don't have|To have = to be with: nina, una, ana, tuna, mna, wana.
+kwa|by, with, for, to
+kwa ajili ya|for (the sake of)
+bila|without
+kutoka|from
+mpaka / hadi|until, up to
+kabla ya|before
+baada ya|after
+pamoja|together
+peke yangu|alone, by myself
+kwa kweli|really, truly
+hivi|like this
+hivyo|like that, in that way`},
+ {id:"v-daily",name:"Verbs: everyday",verb:true,items:`
+kuamka|wake up
+kulala|sleep, lie down
+kuoga|wash yourself, shower
+kuvaa|put on, wear
+kuvua|take off (clothes)
+kula|eat|One-syllable verb: keeps ku- (ninakula). Command: kula!
+kunywa|drink|One-syllable verb: keeps ku- (ninakunywa).
+kupika|cook
+kusafisha|clean
+kufua|wash clothes
+kuosha|wash (dishes, hands, car)
+kupumzika|rest
+kukaa|stay, live, sit|Ninakaa Bunju = I live in Bunju
+kusimama|stand, stop
+kusubiri / kungoja|wait|Subiri kidogo = wait a moment
+kuanza|start
+kumaliza|finish
+kuisha|run out, end|Maji yameisha = the water has run out
+kuweka|put, place
+kuchukua|take
+kuleta|bring|Lete = bring (command)
+kupeleka|take (somewhere), deliver
+kutoa|give out, take out, remove
+kupa|give|Nipe = give me
+kupata|get, receive
+kupoteza|lose
+kutafuta|look for
+kuona|see
+kuangalia|look at, watch
+kusikia|hear, also feel
+kusikiliza|listen
+kugusa|touch
+kufungua|open
+kufunga|close, lock, tie
+kuwasha|switch on, light
+kuzima|switch off, put out
+kuchaji|charge (a phone)
+kupiga simu|make a phone call
+kutuma|send
+kupokea|receive
+kujaribu|try
+kusaidia|help
+kuhitaji|need
+kutaka|want|Nataka = I want (short for ninataka)
+kupenda|like, love
+kuchukia|hate
+kuweza|be able to, can|Ninaweza = I can
+kujua|know
+kuwa|be, become|One-syllable verb: keeps ku- in some tenses (nitakuwa).
+kuwa na|have|Present: nina, una, ana, tuna, mna, wana. Negative: sina, huna, hana...`},
+ {id:"v-talk",name:"Verbs: talking & learning",verb:true,items:`
+kusema|say
+kuongea|talk, chat
+kuzungumza|speak, have a conversation
+kuuliza|ask (a question)
+kujibu|answer
+kueleza|explain
+kuelewa|understand|Sielewi = I don't understand
+kufundisha|teach
+kujifunza|learn
+kusoma|read, study
+kuandika|write
+kuhesabu|count, calculate
+kukumbuka|remember
+kusahau|forget|Nimesahau = I have forgotten
+kufikiri|think
+kurudia|repeat
+kutafsiri|translate
+kuonyesha|show
+kuita|call (someone)
+kuitwa|be called|Ninaitwa Caroline = my name is Caroline
+kusalimia|greet
+kushukuru|thank
+kuomba|ask for, request, pray|Naomba = may I have, please
+kukubali|agree, accept
+kukataa|refuse
+kujadili|discuss
+kushauri|advise
+kuwasilisha|present, hand in
+kusahihisha|correct (an error)`},
+ {id:"v-work",name:"Verbs: work & business",verb:true,items:`
+kufanya|do, make
+kufanya kazi|work
+kuuza|sell
+kununua|buy
+kulipa|pay
+kulipwa|be paid
+kukopa|borrow
+kukopesha|lend
+kuweka akiba|save money
+kupanga|plan, arrange, also rent|kupanga nyumba = rent a house
+kupima|measure
+kukata|cut
+kushona|sew
+kuoka|bake
+kujenga|build
+kutengeneza|make, repair, produce
+kurekebisha|fix, adjust
+kuchomelea|weld
+kupaka rangi|paint
+kulima|farm, dig
+kupanda|plant, also climb or board
+kuvuna|harvest
+kuajiri|employ, hire
+kuanzisha|start, found (a business)
+kuendesha|run (a business), drive
+kusimamia|manage, supervise
+kuhudumia|serve (customers)
+kukagua|inspect, check
+kuboresha|improve
+kushindana|compete
+kutangaza|advertise, announce
+kusajili|register
+kuhifadhi|store, keep
+kugawa|divide, share out
+kuongeza|add, increase
+kupunguza|reduce|Punguza bei = lower the price
+kufaulu|succeed, pass
+kushindwa|fail, be unable`},
+ {id:"v-move",name:"Verbs: moving",verb:true,items:`
+kwenda|go|Ninaenda = I am going. Command: nenda (one), nendeni (all).
+kuja|come|One-syllable verb (ninakuja). Command: njoo (one), njooni (all).
+kurudi|return, come back
+kufika|arrive
+kuondoka|leave, depart
+kutoka|come from, go out|Ninatoka Uswisi = I come from Switzerland
+kuingia|enter, go in
+kutembea|walk, go for a walk
+kukimbia|run
+kushuka|get off, go down
+kusafiri|travel
+kubeba|carry
+kufuata|follow
+kupita|pass, go past
+kugeuka|turn`},
+ {id:"v-feel",name:"Verbs: feelings & thinking",verb:true,items:`
+kufurahi|be happy
+kuhuzunika|be sad
+kukasirika|get angry
+kuogopa|be afraid
+kuchoka|get tired|Nimechoka = I am tired
+kushangaa|be surprised
+kuamini|believe, trust
+kutumaini|hope
+kuamua|decide
+kuchagua|choose
+kujisikia|feel|Najisikia vizuri = I feel well
+kuumwa|be ill
+kuuma|hurt, bite
+kupona|get better, recover
+kucheka|laugh
+kulia|cry
+kuimba|sing
+kucheza|play, dance
+kushinda|win
+kupotea|get lost
+kusamehe|forgive
+kuheshimu|respect`}
+];
+DICT.forEach(d=>{d.items=d.items.trim().split('\n').map(l=>{const p=l.split('|');return [p[0].trim(),(p[1]||'').trim(),(p[2]||'').trim()]})});
+const MONO=new Set(['kula','kunywa','kuja','kuwa','kuwa na','kupa','kwenda']);
+
+/* storage helpers */
+const store = {
+  get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+};
+
+/* speech: only if a Swahili voice exists */
+let swVoice=null;
+function findVoice(){try{const vs=speechSynthesis.getVoices();swVoice=vs.find(v=>/^sw/i.test(v.lang))||null;renderPhrases();if(window.__bReady)renderBuild()}catch(e){}}
+if('speechSynthesis' in window){findVoice();try{speechSynthesis.onvoiceschanged=findVoice}catch(e){}}
+function speak(t){if(!swVoice)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t.replace(/\.\.\./g,'').replace(/ · /g,'. '));u.voice=swVoice;u.lang=swVoice.lang;u.rate=.8;speechSynthesis.speak(u)}catch(e){}}
+
+/* tabs */
+const tabs=[...document.querySelectorAll('nav.tabs button')];
+function showTab(id){tabs.forEach(b=>{const on=b.dataset.panel===id;b.setAttribute('aria-selected',on);document.getElementById(b.dataset.panel).hidden=!on});store.set('ks-tab',id)}
+tabs.forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.panel)));
+const startTab=(location.hash||'').slice(1)||store.get('ks-tab','phrases');
+if(document.getElementById(startTab))showTab(startTab);
+
+/* phrases */
+let cat=store.get('ks-cat','salamu');
+if(!CATS.find(c=>c.id===cat))cat='salamu';
+const catChips=document.getElementById('catChips');
+CATS.forEach(c=>{const b=document.createElement('button');b.className='chip';b.type='button';b.textContent=c.name;b.dataset.id=c.id;b.onclick=()=>{cat=c.id;store.set('ks-cat',cat);renderPhrases()};catChips.appendChild(b)});
+function esc(s){return s.replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}
+function renderPhrases(){
+  [...catChips.children].forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===cat));
+  const c=CATS.find(x=>x.id===cat);
+  document.getElementById('catIntro').textContent=c.intro;
+  document.getElementById('phraseList').innerHTML=c.items.map((it,i)=>`<div class="ph"><div class="sw">${esc(it[0])}</div>${swVoice?`<button class="say" type="button" data-i="${i}" aria-label="Hear ${esc(it[0])}">▶ Hear</button>`:''}<div class="en">${esc(it[1])}</div>${it[2]?`<div class="note">${esc(it[2])}</div>`:''}</div>`).join('');
+  document.querySelectorAll('#phraseList .say').forEach(b=>b.onclick=()=>speak(c.items[+b.dataset.i][0]));
+}
+renderPhrases();
+
+/* word list */
+let wCat=store.get('ks-wcat','all');
+if(wCat!=='all'&&wCat!=='verbs'&&!DICT.find(d=>d.id===wCat))wCat='all';
+const wChips=document.getElementById('wChips'),wSearch=document.getElementById('wSearch');
+[{id:'all',name:'Everything'},{id:'verbs',name:'All verbs'},...DICT].forEach(d=>{const b=document.createElement('button');b.type='button';b.className='chip';b.textContent=d.name;b.dataset.id=d.id;b.onclick=()=>{wCat=d.id;store.set('ks-wcat',wCat);renderWords()};wChips.appendChild(b)});
+function fmtWord(sw,isVerb){
+  if(isVerb){
+    if(MONO.has(sw)||!sw.startsWith('ku'))return `<b>${esc(sw)}</b>`;
+    return `<span class="ku">ku</span>${esc(sw.slice(2))}`;
+  }
+  const m=sw.match(/^(.*?)\s*(\([^)]*\))$/);
+  return m?`${esc(m[1])} <span class="pl">${esc(m[2])}</span>`:esc(sw);
+}
+function norm(s){return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')}
+function renderWords(){
+  [...wChips.children].forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===wCat));
+  const q=norm(wSearch.value.trim());
+  let html='',count=0,total=0;
+  DICT.forEach(d=>{
+    total+=d.items.length;
+    if(!(wCat==='all'||(wCat==='verbs'&&d.verb)||wCat===d.id))return;
+    const rows=d.items.filter(it=>!q||norm(it.join(' ')).includes(q));
+    if(!rows.length)return;
+    count+=rows.length;
+    html+=`<div class="wsec"><h3>${esc(d.name)}</h3>${d.tip&&!q?`<p class="tip">${esc(d.tip)}</p>`:''}${rows.map(it=>`<div class="wrow"><div class="w">${fmtWord(it[0],d.verb)}</div><div class="m">${esc(it[1])}${it[2]?`<span class="n">${esc(it[2])}</span>`:''}</div></div>`).join('')}</div>`;
+  });
+  document.getElementById('wList').innerHTML=html||'<p class="small" style="margin-top:12px">No match. Try a shorter word, or the English meaning.</p>';
+  document.getElementById('wInfo').textContent=q?`${count} matches`:`${count} words shown · ${total} in the full list`;
+}
+wSearch.addEventListener('input',renderWords);
+renderWords();
+
+/* flashcards */
+const fcCat=document.getElementById('fcCat'),fcDir=document.getElementById('fcDir');
+fcCat.innerHTML='<option value="all">All phrases</option><optgroup label="Phrases">'+CATS.map(c=>`<option value="${c.id}">${c.name}</option>`).join('')+'</optgroup><optgroup label="Word list"><option value="allwords">All words</option><option value="allverbs">All verbs</option>'+DICT.map(d=>`<option value="${d.id}">${d.name}</option>`).join('')+'</optgroup>';
+if(![...fcCat.options].some(o=>o.value===store.get('ks-fccat','all')))store.set('ks-fccat','all');
+fcCat.value=store.get('ks-fccat','all');fcDir.value=store.get('ks-fcdir','sw');
+let known=new Set(store.get('ks-known',[]));
+let deck=[],idx=0,flipped=false;
+function allCards(){const v=fcCat.value,list=[];
+  CATS.forEach(c=>{if(v==='all'||v===c.id)c.items.forEach(it=>list.push({key:c.id+'|'+it[0],sw:it[0],en:it[1],note:it[2]}))});
+  DICT.forEach(d=>{if(v==='allwords'||(v==='allverbs'&&d.verb)||v===d.id)d.items.forEach(it=>list.push({key:d.id+'|'+it[0],sw:it[0],en:it[1],note:it[2]}))});
+  return list}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function buildDeck(){deck=shuffle(allCards().filter(c=>!known.has(c.key)));idx=0;showCard()}
+function showCard(){
+  const total=allCards().length,done=allCards().filter(c=>known.has(c.key)).length;
+  document.getElementById('fcProg').style.width=(total?done/total*100:0)+'%';
+  document.getElementById('fcCount').textContent=`${done} of ${total} known`;
+  document.getElementById('fcLeft').textContent=deck.length?`${deck.length} in this round`:'';
+  const face=document.getElementById('cardFace'),back=document.getElementById('cardBack'),hint=document.getElementById('cardHint');
+  flipped=false;back.hidden=true;
+  if(!deck.length){face.textContent='Hongera!';back.hidden=false;back.innerHTML='You know every card in this topic.<span class="n">Press Start over to practise them again.</span>';hint.hidden=true;return}
+  hint.hidden=false;
+  const c=deck[idx%deck.length];
+  face.textContent=fcDir.value==='sw'?c.sw:c.en;
+  back.innerHTML=esc(fcDir.value==='sw'?c.en:c.sw)+(c.note?`<span class="n">${esc(c.note)}</span>`:'');
+}
+function flip(){if(!deck.length)return;flipped=!flipped;document.getElementById('cardBack').hidden=!flipped;document.getElementById('cardHint').hidden=flipped;if(flipped&&fcDir.value==='en')speak(deck[idx%deck.length].sw);if(!flipped)return}
+const cardEl=document.getElementById('card');
+cardEl.onclick=flip;cardEl.onkeydown=e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();flip()}};
+document.getElementById('fcGot').onclick=()=>{if(!deck.length)return;const c=deck.splice(idx%deck.length,1)[0];known.add(c.key);store.set('ks-known',[...known]);if(deck.length)idx=idx%deck.length;showCard()};
+document.getElementById('fcAgain').onclick=()=>{if(!deck.length)return;const c=deck.splice(idx%deck.length,1)[0];deck.push(c);showCard()};
+document.getElementById('fcReset').onclick=()=>{allCards().forEach(c=>known.delete(c.key));store.set('ks-known',[...known]);buildDeck()};
+fcCat.onchange=()=>{store.set('ks-fccat',fcCat.value);buildDeck()};
+fcDir.onchange=()=>{store.set('ks-fcdir',fcDir.value);showCard()};
+buildDeck();
+
+/* builder */
+const PRON=[
+ {sw:"Mimi",s:"ni",n:"si",en:"I",lab:"I",p:"1s"},
+ {sw:"Wewe",s:"u",n:"hu",en:"You",lab:"you",p:"2s"},
+ {sw:"Yeye",s:"a",n:"ha",en:"He / she",lab:"he / she",p:"3s"},
+ {sw:"Sisi",s:"tu",n:"hatu",en:"We",lab:"we",p:"1p"},
+ {sw:"Ninyi",s:"m",n:"ham",en:"You all",lab:"you all",p:"2p"},
+ {sw:"Wao",s:"wa",n:"hawa",en:"They",lab:"they",p:"3p"}
+];
+const TENSES=[{id:"na",label:"now (-na-)",tag:"now"},{id:"li",label:"past (-li-)",tag:"past"},{id:"ta",label:"future (-ta-)",tag:"future"},{id:"me",label:"done (-me-)",tag:"done"}];
+const INF=[{sw:"ni",en:"me",p:"1s"},{sw:"ku",en:"you",p:"2s"},{sw:"m",en:"him / her",p:"3s"},{sw:"tu",en:"us",p:"1p"},{sw:"wa",en:"you all",p:"2p"},{sw:"wa",en:"them",p:"3p"}];
+const POSS=[{st:"angu",en:"my"},{st:"ako",en:"your"},{st:"ake",en:"his / her"},{st:"etu",en:"our"},{st:"enu",en:"your (all)"},{st:"ao",en:"their"}];
+const CLS_SUBJ={1:["a","ha"],2:["wa","hawa"],3:["u","hau"],4:["i","hai"],5:["li","hali"],6:["ya","haya"],7:["ki","haki"],8:["vi","havi"],9:["i","hai"],10:["zi","hazi"],11:["u","hau"]};
+const FAMILY={1:"people",2:"people",3:"m- / mi-",4:"m- / mi-",5:"ji- / ma-",6:"ji- / ma-",7:"ki- / vi-",8:"ki- / vi-",9:"n-",10:"n-",11:"u-"};
+const CLS_FIX={giza:[5,6]};
+const POSS_P={1:"w",2:"w",3:"w",4:"y",5:"l",6:"y",7:"ch",8:"vy",9:"y",10:"z",11:"w"};
+const ADJ_P={1:"m",2:"wa",3:"m",4:"mi",5:"",6:"ma",7:"ki",8:"vi",11:"m"};
+const OTE=["","wote","wote","wote","yote","lote","yote","chote","vyote","yote","zote","wote"];
+
+const S=a=>new Set(a.split(","));
+const ANIMATE=S("rafiki,jirani,mama,baba,dada,kaka,ndugu,bibi,babu,shangazi,mjomba,mume,mke,bwana,kijana,fundi,fundi cherehani,fundi umeme,fundi chuma,fundi magari,fundi bomba,seremala,dereva,daktari,kuku,samaki,mbwa,paka,ng'ombe,mbuzi,mbu,nyoka,ndege,mkuu wa chuo,mtoto wa kwanza");
+const KIN_Y=S("rafiki,jirani,mama,baba,dada,kaka,ndugu,bibi,babu,shangazi");
+const MASS=S("maji,chai,kahawa,maziwa,sukari,chumvi,pilipili,mafuta,wali,mchele,ugali,nyama,mboga,mchicha,unga,chachu,uzi,umeme,damu,mvua,upepo,joto,mchanga,sabuni,dawa,pesa,chaki,rangi,mbolea,mbegu,karatasi,nguo,viazi,maharage,juisi,chipsi mayai,Kiswahili,Kiingereza,Kifaransa,Kijerumani,M-Pesa,VICOBA,mbao,malaria,homa,njaa,kiu,furaha,huzuni,hasira,hofu,upendo,amani,matumaini,giza,mwanga,umeme wa jua,kazi,chakula,chakula cha mchana,chakula cha jioni,kifungua kinywa,kitunguu saumu,gharama zinazobadilika,gharama zisizobadilika,mchango wa faida,hali ya hewa,kazi ya nyumbani,maji ya moto,vifaa vya kazi,kodi ya nyumba,familia,ujuzi,maarifa,ubora,usalama,ushindani,usajili,ujasiriamali,mtaji,mshahara,faida,hasara,mauzo,akiba,riba,kodi,malipo,mafunzo,maelezo,mapumziko,maumivu,ugonjwa,chenji,salio,bando,hesabu,ajira,muda,wakati,ratiba,mafunzo,maarifa,biashara,mtihani");
+const COUNT=S("mwili,moyo,uma,uwanja");
+const PROPER=S("Kiswahili,Kiingereza,Kifaransa,Kijerumani,M-Pesa,VICOBA");
+const NOUN_CATS=["w-people","w-school","w-business","w-trades","w-home","w-food","w-body","w-time","w-places","w-feel"];
+const TIME_ADV=S("leo,jana,kesho,juzi,kesho kutwa,sasa,sasa hivi,baadaye,mapema,asubuhi,mchana,jioni,usiku,alfajiri,Jumatatu,Jumanne,Jumatano,Alhamisi,Ijumaa,Jumamosi,Jumapili,Oktoba,mwisho wa wiki");
+const PLACE_ADV=S("kushoto,kulia,moja kwa moja,hapa,pale,karibu,mbali,mbele,nyuma,ndani,nje,juu,chini");
+const NOT_NOUN=S("Ninaumwa,nimechoka,nimefurahi,umeme umekatika,nyumbani,mia,elfu,laki,milioni");
+
+const MONO_R={la:"ku",nywa:"ku",ja:"ku",wa:"ku",pa:"ku",enda:"kw"};
+const PERSON_OBJ=S("saidia,fundisha,ona,sikia,sikiliza,angalia,subiri,penda,chukia,pa,uliza,jibu,eleza,elewa,kumbuka,sahau,ita,salimia,shukuru,amini,heshimu,samehe,fuata,tafuta,ajiri,lipa,kopesha,hudumia,simamia,shauri,onyesha,jua,gusa,beba,peleka,kubali,kataa,chagua,sahihisha,pokea,shinda,uma,ogopa,hitaji,kagua,acha");
+const INTRANS=S("amka,lala,oga,pumzika,kaa,simama,isha,rudi,fika,ondoka,tembea,kimbia,shuka,safiri,geuka,furahi,huzunika,kasirika,choka,shangaa,umwa,pona,cheka,lia,potea,ja,enda,faulu,shindwa,toka,jisikia,itwa,lipwa,shindana");
+const STATE_ME=S("furahi,huzunika,ogopa,shangaa,umwa,choka,kasirika,pona,potea,elewa");
+const STATIVE=S("like,love,want,know,need,hate,understand,believe,hope,remember,forget,see,hear,have,respect,trust,mean");
+const OBJ_EN_P={kukubali:"accept",kushinda:"beat",kusikiliza:"listen to",kuangalia:"look at",kusubiri:"wait for",kueleza:"explain to",kuhudumia:"serve",kusalimia:"greet",kupeleka:"take",kuuma:"bite",kuita:"call"};
+const OBJ_EN_N={kukubali:"accept",kufua:"wash",kusikiliza:"listen to",kuangalia:"look at",kusubiri:"wait for",kuongea:"speak",kuzungumza:"speak",kupeleka:"take"};
+const DITRANS=S("pa,fundisha,onyesha,uliza,lipa,kopesha,eleza,peleka");
+const MOTION=S("go,come,return,walk,run,travel,take,bring,send,carry,deliver,move,follow");
+const NOPREP=S("enter,leave,pass,visit");
+
+/* English helpers */
+const IRR={wake:["woke","woken"],sleep:["slept","slept"],put:["put","put"],take:["took","taken"],eat:["ate","eaten"],drink:["drank","drunk"],sit:["sat","sat"],stand:["stood","stood"],begin:["began","begun"],get:["got","got"],give:["gave","given"],lose:["lost","lost"],see:["saw","seen"],hear:["heard","heard"],bring:["brought","brought"],make:["made","made"],send:["sent","sent"],feel:["felt","felt"],know:["knew","known"],say:["said","said"],speak:["spoke","spoken"],understand:["understood","understood"],teach:["taught","taught"],read:["read","read"],write:["wrote","written"],forget:["forgot","forgotten"],think:["thought","thought"],show:["showed","shown"],do:["did","done"],sell:["sold","sold"],buy:["bought","bought"],pay:["paid","paid"],lend:["lent","lent"],cut:["cut","cut"],sew:["sewed","sewn"],build:["built","built"],dig:["dug","dug"],go:["went","gone"],come:["came","come"],leave:["left","left"],run:["ran","run"],hurt:["hurt","hurt"],win:["won","won"],forgive:["forgave","forgiven"],choose:["chose","chosen"],sing:["sang","sung"],become:["became","become"],have:["had","had"],keep:["kept","kept"],drive:["drove","driven"],wear:["wore","worn"],bite:["bit","bitten"],tell:["told","told"],find:["found","found"],mean:["meant","meant"],light:["lit","lit"],fight:["fought","fought"],grow:["grew","grown"],hold:["held","held"],meet:["met","met"],spend:["spent","spent"]};
+const DBL=S("travel,put,sit,get,begin,cut,dig,run,win,stop,plan,shop,chat,hit,set,swim,forget,admit");
+function ing(v){if(v==='be')return'being';if(/ie$/.test(v))return v.slice(0,-2)+'ying';if(/[^aeiouy]e$/.test(v))return v.slice(0,-1)+'ing';if(DBL.has(v))return v+v.slice(-1)+'ing';return v+'ing'}
+function s3(v){if(v==='have')return'has';if(v==='be')return'is';if(v==='do'||v==='go')return v+'es';if(/(s|sh|ch|x|z|o)$/.test(v))return v+'es';if(/[^aeiou]y$/.test(v))return v.slice(0,-1)+'ies';return v+'s'}
+function pastF(v){if(IRR[v])return IRR[v][0];if(/e$/.test(v))return v+'d';if(/[^aeiou]y$/.test(v))return v.slice(0,-1)+'ied';if(DBL.has(v))return v+v.slice(-1)+'ed';return v+'ed'}
+function ppF(v){return IRR[v]?IRR[v][1]:pastF(v)}
+const PL_IRR={man:"men",woman:"women",child:"children",tooth:"teeth",foot:"feet",knife:"knives",wife:"wives",fish:"fish",scissors:"scissors",trousers:"trousers",tomato:"tomatoes",mango:"mangoes",sheep:"sheep"};
+function pluralize(e){
+  if(/ of /.test(e)){const i=e.indexOf(' of ');return pluralize(e.slice(0,i))+e.slice(i)}
+  const w=e.split(' '),last=w.pop();let p;
+  if(PL_IRR[last])p=PL_IRR[last];else if(/person$/.test(last))p=last.replace(/person$/,'people');
+  else if(/(s|x|z|ch|sh)$/.test(last))p=last+'es';else if(/[^aeiou]y$/.test(last))p=last.slice(0,-1)+'ies';else p=last+'s';
+  return [...w,p].join(' ');
+}
+function clean(g){return g.replace(/\s*\([^)]*\)/g,'').split(',')[0].replace(/\s+/g,' ').trim()}
+function art(x){return /^(uni|use|eu|one)/i.test(x)?'a':(/^[aeiou]/i.test(x)?'an':'a')}
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+
+/* Build noun index */
+function inferClass(sg,pl,animate){
+  if(animate)return[1,2];
+  const s=sg.split(' ')[0],sl=s.toLowerCase();
+  if(pl){const p=pl.split(' ')[0].toLowerCase();
+    if(/^(vi|vy)/.test(p)&&/^(ki|ch)/.test(sl))return[7,8];
+    if(/^mi/.test(p)&&/^m/.test(sl))return[3,4];
+    if(/^w/.test(p)&&/^m/.test(sl))return[1,2];
+    if(/^m[ae]/.test(p)&&!/^m/.test(sl))return[5,6];
+    if(/^u/.test(sl))return[11,10];
+    return[9,10];}
+  if(s==='M-Pesa'||s==='VICOBA')return[9,10];
+  if(/^ma/.test(sl)&&!['malaria','mashine','mama'].includes(sl))return[6,6];
+  if(/^(vi|vy)/.test(sl))return[8,8];
+  if(/^ki/.test(sl)&&sl!=='kiu')return[7,8];
+  if(/^u/.test(sl))return[11,10];
+  if(/^m[^bv]/.test(sl))return[3,4];
+  return[9,10];
+}
+const NOUNS=[],NBY={};
+DICT.forEach(d=>{if(!NOUN_CATS.includes(d.id))return;d.items.forEach(it=>{
+  let sw=it[0];if(sw.startsWith('-')||NOT_NOUN.has(sw)||TIME_ADV.has(sw)||PLACE_ADV.has(sw))return;
+  const m=sw.match(/^(.*?)\s*\(([^)]*)\)$/);let sg=(m?m[1]:sw).split(' / ')[0].trim();let pl=m?m[2].trim():null;
+  if(NBY[sg])return;
+  const head=sg.split(' ')[0];
+  const animate=ANIMATE.has(sg)||(d.id==='w-people'&&sg!=='familia')||(pl&&/^w/i.test(pl)&&/^m/i.test(sg))||(sg.includes(' ')&&NBY[head]&&NBY[head].animate);
+  let cls=sg.includes(' ')&&NBY[head]?NBY[head].cls:inferClass(sg,pl,animate);
+  if(animate)cls=[1,2];
+  if(CLS_FIX[sg])cls=CLS_FIX[sg];
+  const multi=sg.includes(' ');
+  const mass=MASS.has(sg)||(!multi&&!pl&&!animate&&cls[0]!==9&&!COUNT.has(sg));
+  if(!pl&&!multi&&(animate||(cls[0]===9&&!mass)))pl=sg;
+  const en=clean(it[1]);
+  const n={sg,pl,cls,animate,mass,en,enPl:pluralize(en),cat:d.name,proper:PROPER.has(sg),kinY:KIN_Y.has(sg)};
+  NBY[sg]=n;NOUNS.push(n);
+})});
+
+/* Verbs */
+const VLIST=[],VBY={};
+DICT.forEach(d=>{if(!d.verb)return;d.items.forEach(it=>{
+  const sw=it[0].split(' / ')[0].trim();const words=sw.split(' ');const first=words[0];
+  const extra=words.slice(1).join(' ');const root=first==='kwenda'?'enda':first.slice(2);
+  const key=sw;if(VBY[key])return;
+  const v={key,first,root,extra,mono:MONO_R[root]||'',en:clean(it[1]),cat:d.name,gloss:it[1],
+    personObj:PERSON_OBJ.has(root)&&key!=='kuwa na',trans:!INTRANS.has(root)&&key!=='kuwa'&&key!=='kufanya kazi'&&key!=='kupiga simu'&&key!=='kuweka akiba'&&key!=='kupaka rangi'};
+  if(key==='kuwa')v.trans=false;
+  if(key==='kuwa na'){v.trans=true;v.en='have'}
+  VLIST.push(v);VBY[key]=v;
+})});
+
+/* Adjectives */
+const ADJS=[];
+DICT.forEach(d=>{if(d.id!=='w-describe'&&d.id!=='w-food')return;d.items.forEach(it=>{
+  const sw=it[0];
+  if(d.id==='w-food'&&!sw.startsWith('-'))return;
+  if(['haraka','polepole','kweli','sawa'].includes(sw))return;
+  let en=clean(it[1]);if(sw==='bora')en='better';if(sw==='rahisi')en='cheap';
+  ADJS.push({sw,en,stem:sw.startsWith('-')?sw.slice(1):null});
+})});
+const QUANT={ingi:1,chache:1,ote:1,ingine:1};
+function nasal(s){if(/^[zdgj]/.test(s))return'n'+s;if(/^r/.test(s))return'nd'+s.slice(1);if(/^[bvp]/.test(s))return'm'+s;return s}
+function adjForm(a,c){
+  if(!a.stem)return a.sw;const s=a.stem;
+  if(s==='ote')return OTE[c];
+  if(/^i/.test(s))return({1:'mw',2:'we',3:'mw',4:'m',5:'j',6:'me',7:'k',8:'v',9:'ny',10:'ny',11:'mw'}[c])+(c===2||c===6?s.slice(1):s);
+  if(/^e/.test(s))return({1:'mw',2:'w',3:'mw',4:'my',5:'j',6:'m',7:'ch',8:'vy',9:'ny',10:'ny',11:'mw'}[c])+s;
+  if(c===9||c===10)return nasal(s);
+  if(c===5)return(s.match(/[aeiou]/g)||[]).length===1?'ji'+s:s;
+  return ADJ_P[c]+s;
+}
+function agreeSplit(form,stem){let i=0;while(i<form.length&&i<stem.length&&form[form.length-1-i]===stem[stem.length-1-i])i++;return[form.slice(0,form.length-i),form.slice(form.length-i)]}
+
+/* Places and extras */
+const PLACES=[
+ ["nyumbani","nyumbani","home","at"],["kazi","kazini","work","at"],["chuo","chuoni","the college","at"],["shule","shuleni","school","at"],["darasa","darasani","the classroom","in"],["ofisi","ofisini","the office","in"],["soko","sokoni","the market","at"],["duka","dukani","the shop","at"],["benki","benki","the bank","at"],["posta","posta","the post office","at"],["hospitali","hospitali","hospital","in"],["zahanati","zahanati","the clinic","at"],["kanisa","kanisani","church","in"],["msikiti","msikitini","the mosque","at"],["karakana","karakana","the workshop","in"],["saluni","saluni","the salon","at"],["shamba","shambani","the farm","on"],["mji","mjini","town","in"],["kijiji","kijijini","the village","in"],["mtaa","mtaani","the neighbourhood","in"],["barabara","barabarani","the road","on"],["kituo cha basi","kituo cha basi","the bus stop","at"],["uwanja wa ndege","uwanja wa ndege","the airport","at"],["pwani","pwani","the coast","at"],["bahari","baharini","the sea","in"],["jiko","jikoni","the kitchen","in"],["chumba","chumbani","the room","in"],["sebule","sebuleni","the living room","in"],["bafu","bafuni","the bathroom","in"],["choo","chooni","the toilet","in"],["kitanda","kitandani","bed","in"],
+ ["hapa","hapa","here",""],["pale","pale","there",""],["karibu","karibu","nearby",""],["mbali","mbali","far away",""],["nje","nje","outside",""],["ndani","ndani","inside",""],["mbele","mbele","ahead",""],["nyuma","nyuma","behind",""],["kushoto","kushoto","left",""],["kulia","kulia","right",""],["moja kwa moja","moja kwa moja","straight on",""]
+].map(p=>({sw:p[0],loc:p[1],en:p[2],prep:p[3],adv:p[3]===''}));
+const EXTRAS=[
+ ["leo","today",""],["jana","yesterday","past"],["juzi","the day before yesterday","past"],["kesho","tomorrow","future"],["kesho kutwa","the day after tomorrow","future"],["sasa","now",""],["sasa hivi","right now",""],["baadaye","later","future"],["mapema","early",""],["asubuhi","in the morning",""],["mchana","in the afternoon",""],["jioni","in the evening",""],["usiku","at night",""],["alfajiri","at dawn",""],["kila siku","every day",""],["mwisho wa wiki","at the weekend",""],
+ ["Jumatatu","on Monday",""],["Jumanne","on Tuesday",""],["Jumatano","on Wednesday",""],["Alhamisi","on Thursday",""],["Ijumaa","on Friday",""],["Jumamosi","on Saturday",""],["Jumapili","on Sunday",""],
+ ["sana","a lot","how"],["kidogo","a little","how"],["vizuri","well","how"],["haraka","quickly","how"],["polepole","slowly","how"],["pamoja","together","how"],["tena","again","how"],["pia","too","how"],["peke","alone","peke"]
+].map(e=>({sw:e[0],en:e[1],kind:e[2]}));
+
+/* State */
+let B=store.get('ks-build2',null)||{subj:{t:'p',i:0},subjPl:false,t:0,neg:false,v:'kujifunza',inf:-1,obj:'Kiswahili',objPl:false,poss:-1,adj:'',place:'',extra:''};
+function sane(){
+  if(!VBY[B.v])B.v='kujifunza';
+  if(B.subj.t==='n'&&!NBY[B.subj.k])B.subj={t:'p',i:0};
+  if(B.subj.t==='p'&&!(B.subj.i>=0&&B.subj.i<6))B.subj={t:'p',i:0};
+  if(B.obj&&!NBY[B.obj])B.obj='';
+  if(B.adj&&!ADJS.find(a=>a.sw===B.adj))B.adj='';
+  if(!(B.t>=0&&B.t<4))B.t=0;
+}
+sane();
+const saveB=()=>store.set('ks-build2',B);
+
+/* Controls */
+function optGroups(list,groupKey,valFn,textFn,first){
+  let html=first?`<option value="">${esc(first)}</option>`:'';let g=null;
+  list.forEach(x=>{if(x[groupKey]!==g){if(g!==null)html+='</optgroup>';g=x[groupKey];html+=`<optgroup label="${esc(g)}">`}html+=`<option value="${esc(valFn(x))}">${esc(textFn(x))}</option>`});
+  return html+(g!==null?'</optgroup>':'');
+}
+const $=id=>document.getElementById(id);
+function chips(el,items,isOn,onPick){el.innerHTML='';items.forEach((it,i)=>{const b=document.createElement('button');b.type='button';b.className='chip';b.textContent=it;b.setAttribute('aria-pressed',isOn(i));b.onclick=()=>{onPick(i);saveB();renderBuild()};el.appendChild(b)})}
+$('bSubjN').innerHTML=optGroups(NOUNS,'cat',n=>n.sg,n=>`${n.sg} · ${n.en}`,'Or choose a person or thing');
+$('bVerb').innerHTML=optGroups(VLIST,'cat',v=>v.key,v=>`${v.key} · ${v.en}`);
+$('bObj').innerHTML=optGroups(NOUNS,'cat',n=>n.sg,n=>`${n.sg} · ${n.en}`,'No thing after the verb');
+$('bAdj').innerHTML='<option value="">No describing word</option>'+ADJS.map(a=>`<option value="${esc(a.sw)}">${esc(a.sw)} · ${esc(a.en)}</option>`).join('');
+$('bPlace').innerHTML='<option value="">No place</option><optgroup label="Places (+ -ni = at, in, to)">'+PLACES.filter(p=>!p.adv).map(p=>`<option value="${esc(p.sw)}">${esc(p.loc)} · ${esc(p.en)}</option>`).join('')+'</optgroup><optgroup label="Directions">'+PLACES.filter(p=>p.adv).map(p=>`<option value="${esc(p.sw)}">${esc(p.sw)} · ${esc(p.en)}</option>`).join('')+'</optgroup>';
+$('bExtra').innerHTML='<option value="">No time or manner word</option><optgroup label="When">'+EXTRAS.filter(e=>e.kind!=='how'&&e.kind!=='peke').map(e=>`<option value="${esc(e.sw)}">${esc(e.sw)} · ${esc(e.en)}</option>`).join('')+'</optgroup><optgroup label="How">'+EXTRAS.filter(e=>e.kind==='how'||e.kind==='peke').map(e=>`<option value="${esc(e.sw==='peke'?'peke':e.sw)}">${esc(e.sw==='peke'?'peke yangu / yako ...':e.sw)} · ${esc(e.en)}</option>`).join('')+'</optgroup>';
+$('bSubjN').onchange=e=>{const k=e.target.value;B.subj=k?{t:'n',k}:{t:'p',i:0};B.subjPl=false;saveB();renderBuild()};
+$('bVerb').onchange=e=>{B.v=e.target.value;saveB();renderBuild()};
+$('bObj').onchange=e=>{B.obj=e.target.value;B.objPl=false;if(B.obj&&!DITRANS.has(VBY[B.v].root))B.inf=-1;saveB();renderBuild()};
+$('bAdj').onchange=e=>{B.adj=e.target.value;saveB();renderBuild()};
+$('bPlace').onchange=e=>{B.place=e.target.value;saveB();renderBuild()};
+$('bExtra').onchange=e=>{B.extra=e.target.value;saveB();renderBuild()};
+$('bClear').onclick=()=>{Object.assign(B,{inf:-1,obj:'',objPl:false,poss:-1,adj:'',place:'',extra:''});saveB();renderBuild()};
+
+/* Swahili verb assembly */
+function swVerb(sp,np,t,neg,v,inf){
+  const segs=[],after=[],rules=[];
+  const push=(c,text,label)=>segs.push({c,text,label});
+  if(v.key==='kuwa na'&&t==='na'){
+    if(neg)push('n',np,'not + who');else push('s',sp,'who');
+    push('r','na','with');
+    rules.push(`To have is "to be with": ${neg?np:sp} + na = ${neg?np:sp}na. No tense piece in the present.`);
+    return{segs,after,rules};
+  }
+  const root=v.key==='kuwa na'?'wa':v.root;const mono=v.key==='kuwa na'?'ku':v.mono;
+  let infTxt=inf?inf.sw:'';
+  if(infTxt==='m'&&/^[aeiou]/.test(root)){infTxt='mw';rules.push('-m- becomes -mw- before a vowel.')}
+  const infLabel=inf?(inf.refl?'self':'to '+inf.en):'';
+  if(!neg){
+    push('s',sp,'who');push('t',t,TENSES.find(x=>x.id===t).tag);
+    if(infTxt)push('oi',infTxt,infLabel);
+    if(mono&&!infTxt){push('x',mono,'keeps ku');rules.push('Short verbs (kula, kunywa, kuja, kwenda, kuwa, kupa) keep their ku- after the tense piece.')}
+    else if(mono&&infTxt)rules.push('With a "to whom" piece, short verbs drop their ku-.');
+    push('r',root,'verb');
+  }else{
+    push('n',np,'not + who');
+    if(t==='na'){
+      if(infTxt)push('oi',infTxt,infLabel);
+      const r2=/a$/.test(root)?root.slice(0,-1)+'i':root;
+      push('r',r2,r2!==root?'a → i':'verb');
+      rules.push(r2!==root?'Present negative: no tense piece, and the final -a of the verb becomes -i.':'Present negative: no tense piece. Verbs ending in -i, -e or -u keep their ending.');
+    }else if(t==='li'){
+      push('t',root==='enda'&&!infTxt?'kw':'ku','past (not)');if(infTxt)push('oi',infTxt,infLabel);push('r',root,'verb');
+      rules.push('Past negative: -li- becomes -ku-.');
+    }else if(t==='ta'){
+      push('t','ta','future');if(infTxt)push('oi',infTxt,infLabel);
+      if(mono&&!infTxt)push('x',mono,'keeps ku');
+      push('r',root,'verb');rules.push('Future negative: only the "who" piece changes.');
+    }else{
+      push('t','ja','not yet');if(infTxt)push('oi',infTxt,infLabel);push('r',root,'verb');
+      rules.push('-me- becomes -ja-, meaning "not yet".');
+    }
+  }
+  if(v.key==='kuwa na')after.push({text:'na',label:'with'});
+  else if(v.extra)after.push({text:v.extra,label:'part of the verb'});
+  return{segs,after,rules};
+}
+
+/* English verb */
+const BE={'1s':'am','3s':'is'},WAS={'1s':'was','3s':'was'};
+const beF=p=>BE[p]||'are',wasF=p=>WAS[p]||'were',haveF=p=>p==='3s'?'has':'have',doF=p=>p==='3s'?'does':'do';
+function engVerb(v,p,t,neg,g,refl){
+  if(v.key==='kuwa')g=(t==='na'||t==='me')?'become':'be';
+  const parts=g.split(' ');const head=parts[0];let rest=parts.slice(1).join(' ').replace(/\byourself\b/,refl);
+  let pre,yet=false;const state=STATE_ME.has(v.root);
+  if(v.key==='kuweza'){
+    pre=t==='na'?(neg?'cannot':'can'):t==='li'?(neg?'could not':'could'):t==='ta'?`will${neg?' not':''} be able to`:`${haveF(p)}${neg?' not':''} been able to`;
+    return{pre,rest:'',objBefore:false,yet:t==='me'&&neg,head:'can'};
+  }
+  if(head==='be'){
+    if(t==='na')pre=beF(p)+(neg?' not':'');else if(t==='li')pre=wasF(p)+(neg?' not':'');else if(t==='ta')pre=`will${neg?' not':''} be`;
+    else{pre=state?beF(p)+(neg?' not':''):`${haveF(p)}${neg?' not':''} been`;yet=neg}
+  }else if(head==='get'&&state&&t==='me'){pre=beF(p)+(neg?' not':'');yet=neg}
+  else{
+    const stv=STATIVE.has(head);
+    if(t==='na')pre=stv?(neg?`${doF(p)} not ${head}`:(p==='3s'?s3(head):head)):`${beF(p)}${neg?' not':''} ${ing(head)}`;
+    else if(t==='li')pre=neg?`did not ${head}`:pastF(head);
+    else if(t==='ta')pre=`will${neg?' not':''} ${head}`;
+    else if(state){pre=neg?`${doF(p)} not ${head}`:(p==='3s'?s3(head):head);yet=neg}
+    else{pre=`${haveF(p)}${neg?' not':''} ${ppF(head)}`;yet=neg}
+  }
+  return{pre,rest,objBefore:['up','down','on','off','out','back','away'].includes(rest),yet,head};
+}
+
+/* Noun phrases */
+function npClass(n,pl){return n.animate?(pl?2:1):(pl?n.cls[1]:n.cls[0])}
+function possForm(n,pl,st){if(n.kinY)return(pl?'z':'y')+st;return POSS_P[npClass(n,pl)]+st}
+function npEnglish(n,pl,role,poss,adj){
+  const base=pl?n.enPl:n.en;const possEn=poss>=0?POSS[poss].en:'';
+  const q=adj&&adj.stem&&QUANT[adj.stem]?adj.stem:null;const plural=pl||n.mass;
+  if(q){
+    if(q==='ote')return possEn?`all ${possEn} ${base}`:(plural?`all the ${base}`:`the whole ${base}`);
+    if(q==='ingine')return possEn?`${possEn} other ${base}`:(plural?`other ${base}`:`another ${base}`);
+    if(q==='ingi')return pl?`many ${possEn?'of '+possEn+' ':''}${base}`:`a lot of ${possEn?possEn+' ':''}${base}`;
+    return pl?`a few ${possEn?'of '+possEn+' ':''}${base}`:`a little ${possEn?possEn+' ':''}${base}`;
+  }
+  const core=(adj?adj.en+' ':'')+base;
+  if(possEn)return possEn+' '+core;
+  if(n.proper)return core;
+  if(role==='subj')return'the '+core;
+  if(plural)return core;
+  return art(core)+' '+core;
+}
+
+/* Render */
+function segHTML(c,text,label,agree){
+  const inner=agree&&agree[0]?`<span class="ag">${esc(agree[0])}</span>${esc(agree[1])}`:esc(text);
+  return `<span class="seg ${c}"><b>${inner}</b><i>${esc(label)}</i></span>`;
+}
+let lastSw='';
+function renderBuild(){
+  sane();
+  const v=VBY[B.v],t=TENSES[B.t].id,neg=B.neg;
+  // subject
+  let sp,np,p,subjEn,subjWord='',subjLabel,refl,rules=[],subjOptional='';
+  if(B.subj.t==='p'){
+    const pr=PRON[B.subj.i];sp=pr.s;np=pr.n;p=pr.p;subjEn=pr.en;subjOptional=pr.sw;
+    refl={'1s':'myself','2s':'yourself','3s':'himself / herself','1p':'ourselves','2p':'yourselves','3p':'themselves'}[p];
+  }else{
+    const n=NBY[B.subj.k];const pl=B.subjPl&&!!n.pl;const c=npClass(n,pl);
+    [sp,np]=CLS_SUBJ[c];p=pl?'3p':'3s';subjEn=cap(npEnglish(n,pl,'subj',-1,null));
+    refl=pl?'themselves':(n.animate?'himself / herself':'itself');
+    subjWord=segHTML('o',pl?n.pl:n.sg,FAMILY[c]+(pl?', many':''));
+    if(n.animate&&!/^m/i.test(n.sg)&&!/^w/i.test(pl?n.pl:n.sg))rules.push(`People and animals always take a- / wa- on the verb, even when the word looks like another family (${n.sg}).`);
+    else rules.push(`${pl?n.pl:n.sg} is in the ${FAMILY[c]} family${pl?' (many)':''}, so the verb starts with ${sp}-${neg?' and the negative with '+np+'-':''}.`);
+  }
+  // to whom
+  let inf=null;const infOK=v.personObj;
+  if(!infOK)B.inf=-1;
+  if(B.inf>=0){inf={...INF[B.inf]};
+    if(B.subj.t==='p'&&['1s','2s','1p','2p'].includes(p)&&inf.p===p){inf={sw:'ji',en:refl,refl:true};rules.push('Doing it to yourself uses -ji-: ninajiona, I see myself.')}}
+  // object
+  if(B.inf>=0&&B.obj&&!DITRANS.has(v.root))B.obj='';
+  const objOK=v.trans;let obj=objOK&&B.obj?NBY[B.obj]:null;const objPl=obj&&B.objPl&&!!obj.pl;
+  const adj=obj&&B.adj?ADJS.find(a=>a.sw===B.adj):null;const poss=obj?B.poss:-1;
+  // swahili verb
+  const vv=swVerb(sp,np,t,neg,v,inf);rules=rules.concat(vv.rules);
+  if(v.root==='enda'&&!neg&&!inf)rules.push('Ninaenda is just as common as ninakwenda.');
+  if(v.key==='kuwa')rules.push('For am / is / are Swahili uses ni: Mimi ni mwalimu. Not: Mimi si mwalimu. Ninakuwa means I am becoming.');
+  if(v.key==='kupa'&&!inf)rules.push('-pa (give) needs a "to whom" piece: ninakupa, I give you. Choose one below.');
+  if(STATE_ME.has(v.root)&&t==='me')rules.push(`-me- here describes how you are now: ni-me-${v.root} is the everyday way to say it.`);
+  let words=[];
+  if(subjWord)words.push(`<span class="vw">${subjWord}</span>`);
+  words.push(`<span class="vw">${vv.segs.map(s=>segHTML(s.c,s.text,s.label)).join('')}</span>`);
+  let swParts=[];if(B.subj.t==='n')swParts.push(B.subj.t==='n'&&NBY[B.subj.k]?(B.subjPl&&NBY[B.subj.k].pl?NBY[B.subj.k].pl:NBY[B.subj.k].sg):'');
+  swParts.push(vv.segs.map(s=>s.text).join(''));
+  vv.after.forEach(a=>{words.push(`<span class="vw">${segHTML('x',a.text,a.label)}</span>`);swParts.push(a.text)});
+  // object noun phrase
+  if(obj){
+    const c=npClass(obj,objPl);const form=objPl?obj.pl:obj.sg;
+    let w=segHTML('o',form,'what · '+FAMILY[c]);swParts.push(form);
+    if(poss>=0){const pf=possForm(obj,objPl,POSS[poss].st);w+=segHTML('o',pf,POSS[poss].en,agreeSplit(pf,POSS[poss].st));swParts.push(pf)}
+    if(adj){const af=adjForm(adj,c);w+=segHTML('o',af,adj.en,adj.stem?agreeSplit(af,adj.stem):null);swParts.push(af);
+      if(adj.stem)rules.push(`Describing words and "my, your" take the noun's family prefix: ${form}${poss>=0?' '+possForm(obj,objPl,POSS[poss].st):''} ${af}.`);
+      else rules.push(`${adj.sw} never changes, whatever the noun.`)}
+    else if(poss>=0)rules.push(obj.kinY?`Family words use yangu / zangu: ${form} ${possForm(obj,objPl,POSS[poss].st)}.`:`"My, your, his" agree with the noun: ${form} ${possForm(obj,objPl,POSS[poss].st)}.`);
+    words.push(`<span class="vw">${w}</span>`);
+  }
+  // place
+  const place=B.place?PLACES.find(x=>x.sw===B.place):null;
+  if(place){words.push(`<span class="vw">${segHTML('x',place.loc,'where')}</span>`);swParts.push(place.loc);
+    if(place.loc!==place.sw&&place.sw!=='nyumbani')rules.push(`Add -ni to a place to mean at, in or to: ${place.sw} → ${place.loc}.`)}
+  // extra
+  const ex=B.extra?EXTRAS.find(x=>x.sw===B.extra):null;let exSw='';
+  if(ex){exSw=ex.kind==='peke'?'peke '+(['yangu','yako','yake','yetu','yenu','yao'][PRON.findIndex(q=>q.p===p)]||'yake'):ex.sw;
+    words.push(`<span class="vw">${segHTML('x',exSw,ex.kind==='how'||ex.kind==='peke'?'how':'when')}</span>`);swParts.push(exSw);
+    if(ex.kind==='past'&&t!=='li'&&t!=='me')rules.push(`${ex.sw} is in the past, so choose -li- (past).`);
+    if(ex.kind==='future'&&t!=='ta')rules.push(`${ex.sw} is in the future, so choose -ta- (future).`);
+    if(ex.kind==='peke')rules.push('Peke ("alone") takes my, your, his: peke yangu, peke yako, peke yake.');}
+  $('bWord').innerHTML=words.join('');
+  // English
+  const useP=inf&&OBJ_EN_P[v.key]?OBJ_EN_P[v.key]:(obj&&OBJ_EN_N[v.key]?OBJ_EN_N[v.key]:v.en);
+  const ev=engVerb(v,p,t,neg,useP,refl);
+  let en=subjEn+' '+ev.pre;const infEn=inf?inf.en:'';
+  if(ev.objBefore&&infEn)en+=' '+infEn+' '+ev.rest;else{if(ev.rest)en+=' '+ev.rest;if(infEn)en+=' '+infEn}
+  if(obj)en+=' '+npEnglish(obj,objPl,'obj',poss,adj);
+  if(place){
+    let prep;const g=useP.split(' ');const last=g[g.length-1];
+    if(place.adv)prep='';else if(['from','to','at','for','into'].includes(last))prep='';
+    else if(ev.head==='arrive')prep='at';else if(NOPREP.has(ev.head))prep='';
+    else if(MOTION.has(ev.head))prep=place.sw==='nyumbani'?'':'to';else prep=place.prep;
+    en+=' '+(prep?prep+' ':'')+place.en;
+  }
+  if(ex)en+=' '+ex.en;
+  if(ev.yet)en+=' yet';
+  const swSentence=cap(swParts.filter(Boolean).join(' '));lastSw=swSentence;
+  $('bSentence').innerHTML=`<strong>${esc(swSentence)}</strong>${subjOptional?` <span class="small">(${esc(subjOptional)} can go in front)</span>`:''}<br>${esc(en.replace(/\s+/g,' '))}.`;
+  if(!rules.length)rules.push('Read the verb from the left: who, when, then the root.');
+  $('bRules').innerHTML=rules.map(r=>`<li>${esc(r)}</li>`).join('');
+  $('bHear').hidden=!swVoice;
+  // controls state
+  chips($('bWho'),PRON.map(x=>x.lab+' ('+x.sw.toLowerCase()+')'),i=>B.subj.t==='p'&&B.subj.i===i,i=>{B.subj={t:'p',i};B.subjPl=false});
+  $('bSubjN').value=B.subj.t==='n'?B.subj.k:'';
+  const sn=B.subj.t==='n'?NBY[B.subj.k]:null;
+  $('bSubjNum').hidden=!(sn&&sn.pl);
+  if(sn&&sn.pl)chips($('bSubjNum'),[`one (${sn.sg})`,`many (${sn.pl})`],i=>(i===1)===!!B.subjPl,i=>{B.subjPl=i===1});
+  chips($('bWhen'),TENSES.map(x=>x.label),i=>i===B.t,i=>{B.t=i});
+  chips($('bPol'),['yes','not'],i=>(i===1)===B.neg,i=>{B.neg=i===1});
+  $('bVerb').value=B.v;
+  $('bInf').hidden=!infOK;$('bInfNote').hidden=infOK;
+  $('bInfNote').textContent=`${v.key} does not take a person inside the verb here.`;
+  if(infOK)chips($('bInf'),['nobody',...INF.map(x=>x.en)],i=>i-1===B.inf,i=>{B.inf=i-1;if(B.inf>=0&&!DITRANS.has(VBY[B.v].root)){B.obj='';B.poss=-1;B.adj=''}});
+  $('bObj').hidden=!objOK;$('objMore').hidden=!objOK||!B.obj;$('bObjNote').hidden=objOK;
+  $('bObjNote').textContent=`${v.key} does not take a thing after it. Try a place or a time word instead.`;
+  $('bObj').value=objOK?B.obj:'';
+  const on=objOK&&B.obj?NBY[B.obj]:null;
+  $('bObjNum').hidden=!(on&&on.pl);
+  if(on&&on.pl)chips($('bObjNum'),[`one (${on.sg})`,`many (${on.pl})`],i=>(i===1)===!!B.objPl,i=>{B.objPl=i===1});
+  chips($('bPoss'),['no "my"',...POSS.map(x=>x.en)],i=>i-1===B.poss,i=>{B.poss=i-1});
+  $('bAdj').value=B.adj;$('bPlace').value=B.place;$('bExtra').value=B.extra;
+}
+$('bHear').onclick=()=>speak(lastSw);
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const THEME_ROOT={food:"la,nywa,pika,kata,nunua,uza,leta,pata,taka,penda,hitaji,oka,tafuta,beba,weka,chukua,hifadhi",school:"soma,andika,jifunza,fundisha,uliza,jibu,eleza,sahau,kumbuka,rudia,tafsiri,elewa,sahihisha,onyesha,jadili,wasilisha,kagua",clothes:"vaa,vua,fua,shona,osha,safisha",switch:"washa,zima,chaji,tengeneza,rekebisha",door:"fungua,funga"};
+const THEME_NOUNS={food:()=>NOUNS.filter(n=>n.cat==='Food & drink'),school:()=>NOUNS.filter(n=>n.cat==='School & classroom'&&!n.animate),clothes:()=>["nguo","shati","suruali","gauni","sare","kitenge","kitambaa"].map(k=>NBY[k]).filter(Boolean),switch:()=>["taa","simu","mashine","oveni","jiko","gari","pikipiki"].map(k=>NBY[k]).filter(Boolean),door:()=>["mlango","dirisha","duka","geti","kitabu","daftari"].map(k=>NBY[k]).filter(Boolean)};
+const CAT_NOUNS={"Verbs: everyday":["House & home","Food & drink"],"Verbs: talking & learning":["School & classroom"],"Verbs: work & business":["Business & money","Trades & tools"],"Verbs: moving":["House & home"],"Verbs: feelings & thinking":["People & family","School & classroom"]};
+function objFor(v){
+  for(const k in THEME_ROOT)if(THEME_ROOT[k].split(',').includes(v.root)){const l=THEME_NOUNS[k]();if(l.length)return pick(l)}
+  const cats=CAT_NOUNS[v.cat]||["House & home"];const l=NOUNS.filter(n=>cats.includes(n.cat)&&(cats.includes("People & family")||!n.animate));return pick(l);
+}
+$('bRandom').onclick=()=>{
+  const v=pick(VLIST);B.v=v.key;B.t=Math.floor(Math.random()*4);B.neg=Math.random()<.25;
+  if(Math.random()<.65){B.subj={t:'p',i:Math.floor(Math.random()*6)};B.subjPl=false}
+  else{const an=NOUNS.filter(n=>n.animate&&!n.sg.includes(' ')&&n.cat!=='Feelings & weather'&&n.cat!=='Food & drink');const n=pick(an);B.subj={t:'n',k:n.sg};B.subjPl=!!n.pl&&Math.random()<.4}
+  B.inf=v.personObj&&Math.random()<(DITRANS.has(v.root)?.6:.4)?Math.floor(Math.random()*6):-1;
+  B.obj='';B.poss=-1;B.adj='';B.objPl=false;
+  if(v.trans&&(B.inf<0||DITRANS.has(v.root))&&Math.random()<.8){const n=objFor(v);B.obj=n.sg;B.objPl=!!n.pl&&Math.random()<.3;B.poss=Math.random()<.3?Math.floor(Math.random()*6):-1;B.adj=Math.random()<.25?pick(ADJS).sw:''}
+  B.place='';
+  if(!v.trans||Math.random()<.2){const motion=['enda','ja','rudi','fika','ondoka','tembea','kimbia','safiri','ingia','toka'].includes(v.root);B.place=Math.random()<(motion?.9:.5)?pick(PLACES.filter(p=>!p.adv)).sw:''}
+  B.extra=Math.random()<.4?pick(EXTRAS).sw:'';
+  if(B.extra){const e=EXTRAS.find(x=>x.sw===B.extra);if(e.kind==='past')B.t=1;if(e.kind==='future')B.t=2}
+  saveB();renderBuild();
+};
+renderBuild();window.__bReady=true;
+
+/* swahili time */
+const NUM=["kumi na mbili","moja","mbili","tatu","nne","tano","sita","saba","nane","tisa","kumi","kumi na moja"];
+const tHour=document.getElementById('tHour'),tMin=document.getElementById('tMin');
+for(let h=0;h<24;h++){const o=document.createElement('option');o.value=h;o.textContent=String(h).padStart(2,'0')+(h<12?' (am)':' (pm)');tHour.appendChild(o)}
+tHour.value=store.get('ks-th',8);tMin.value=store.get('ks-tm',0);
+function period(h){if(h>=4&&h<=6)return'alfajiri';if(h>=7&&h<=11)return'asubuhi';if(h>=12&&h<=15)return'mchana';if(h>=16&&h<=18)return'jioni';return'usiku'}
+function renderTime(){
+  const h=+tHour.value,m=+tMin.value;store.set('ks-th',h);store.set('ks-tm',m);
+  const named=m===45?(h+1)%24:h;
+  const sh=((named-6)%12+12)%12;
+  let txt='saa '+NUM[sh];
+  if(m===15)txt+=' na robo';else if(m===30)txt+=' na nusu';else if(m===45)txt+=' kasorobo';
+  txt+=' '+period(m===45?named:h);
+  document.getElementById('tOut').textContent=txt.charAt(0).toUpperCase()+txt.slice(1);
+  const clockH=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0');
+  const h12=named%12===0?12:named%12;
+  document.getElementById('tMath').textContent=`${clockH}  →  ${m===45?'quarter to ':''}${h12} o'clock minus 6 hours  =  hour ${sh===0?12:sh}`;
+}
+tHour.onchange=renderTime;tMin.onchange=renderTime;renderTime();
+</script>
+</body>
+</html>
